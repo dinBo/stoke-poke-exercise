@@ -3,14 +3,14 @@ import { i18n } from '../translations/i18n';
 import { getLocales } from 'expo-localization';
 import { useEffect, useState } from 'react';
 import { fetchBowls, fetchSection, fetchSizes } from '../services/ApiService';
-import { Checkbox, RadioButton } from 'react-native-paper';
+import { Button, Checkbox, RadioButton } from 'react-native-paper';
 import { SECTION_TYPES, STEPS } from '../consts/stepConsts';
 
 const Section = ({ section }) => {
   return (
     <View>
       <Text style={styles.sectionTitle}>{section.title}</Text>
-      <Text style={styles.sectionDescription}>{section.description}</Text>
+      {section.description && <Text style={styles.sectionDescription}>{section.description}</Text>}
       {
         section.type === SECTION_TYPES.SINGLE_OPTION && (
           // <RadioButton.Group onValueChange={newValue => setValue(newValue)} value={value}>
@@ -40,7 +40,7 @@ const Section = ({ section }) => {
   )
 }
 
-const Step = ({ step }) => {
+const Step = ({ step, currentStepId }) => {
   const [sections, setSections] = useState([])
 
   useEffect(() => {
@@ -56,9 +56,10 @@ const Step = ({ step }) => {
     step.sections.map(section => getSection(section));
   }, [])
 
+  if (currentStepId !== step.id) return
+
   return (
     <View>
-      <Text>--------------------------------------------</Text>
       {
         sections.map((section, index) => <Section section={section} key={section.id} />)
       }
@@ -68,9 +69,17 @@ const Step = ({ step }) => {
 
 export default function HomeScreen() {
   const [value, setValue] = useState();
+  const [currentStepId, setCurrentStep] = useState(1);
 
   useEffect(() => {
-  }, [])
+    // console.log(currentStepId);
+  }, [currentStepId])
+
+  const isBeforeButtonVisible = () => currentStepId > 1
+
+  const isNextButtonVisible = () => currentStepId < STEPS.length
+
+  const areBothButtonsVisible = () => isBeforeButtonVisible() && isNextButtonVisible()
 
   return (
     <View style={styles.container}>
@@ -80,9 +89,31 @@ export default function HomeScreen() {
         </Text>
         {
           STEPS.map(step => (
-            <Step step={step} key={step.id} />
+            <Step step={step} key={step.id} currentStepId={currentStepId} />
           ))
         }
+        <View style={styles.buttonsContainer}>
+          {isBeforeButtonVisible() && (
+            <Button
+              icon="camera"
+              mode="contained"
+              style={[styles.button, areBothButtonsVisible() && { width: '50%' }]}
+              onPress={() => setCurrentStep(currentStepId - 1)}
+            >
+              Back
+            </Button>
+          )}
+          {isNextButtonVisible() && (
+            <Button
+              icon="camera"
+              mode="contained"
+              style={[styles.button, areBothButtonsVisible() && { width: '50%' }]}
+              onPress={() => setCurrentStep(currentStepId + 1)}
+            >
+              Next
+            </Button>
+          )}
+        </View>
       </ScrollView>
     </View>
   );
@@ -106,5 +137,12 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 15,
     fontWeight: '700',
+  },
+  buttonsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+  button: {
+    width: '100%',
   },
 });
