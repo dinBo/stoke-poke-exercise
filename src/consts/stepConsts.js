@@ -47,6 +47,7 @@ export const STEPS = [
         order: 3,
         type: SECTION_TYPES.MULTIPLE_OPTIONS,
         data: 'ingredients',
+        // isLimited: true,
       },
     ],
   },
@@ -64,3 +65,21 @@ export const STEPS = [
     ],
   },
 ]
+
+/**
+ * the mapping is in format: stepId_sectionId
+ */
+export const SECTION_IDS = {
+  BOWL: '1_1',
+  SIZE: '2_1',
+  BASE: '2_2',
+  SAUSE: '2_3',
+  OTHER: '2_4',
+  EXTRA: '3_1',
+}
+
+export const BOWL_SIZE_ID = {
+  SMALL: 1,
+  MEDIUM: 2,
+  LARGE: 3,
+}

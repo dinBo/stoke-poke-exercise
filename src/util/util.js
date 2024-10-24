@@ -1,0 +1,1 @@
+export const getSectionId = (step, section) => `${step.id}_${section.id}`
