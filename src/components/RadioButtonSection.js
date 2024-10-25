@@ -39,7 +39,7 @@ const RadioButtonOption = ({ step, section, option, setError }) => {
 
   return (
     <Pressable style={styles.option} key={getOptionId()} onPress={handlePressed}>
-      <RadioButton status={getStatus()} />
+      <RadioButton status={getStatus()} onPress={handlePressed} />
       <Text>{option.name}</Text>
       {/* <Text>      </Text> */}
       {/* <Text>{`key: ${getOptionId()}`}</Text> */}
