@@ -13,6 +13,7 @@ import { useNavigation } from '@react-navigation/core';
 const Step = ({ step, currentStepId, resetSteps }) => {
   const [sections, setSections] = useState([])
   const {
+    orderId,
     bowl,
     size,
     base,
@@ -46,6 +47,7 @@ const Step = ({ step, currentStepId, resetSteps }) => {
 
   const handleAddToCart = () => {
     addToOrders(
+      orderId,
       bowl,
       size,
       base,

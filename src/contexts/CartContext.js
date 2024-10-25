@@ -10,6 +10,7 @@ export const CartProvider = ({ children }) => {
   const [orders, setOrders] = useState([]);
 
   const addToOrders = (
+    orderId,
     bowl,
     size,
     base,
@@ -20,6 +21,7 @@ export const CartProvider = ({ children }) => {
     priceTotal,
   ) => {
     setOrders(prevOrders => [...prevOrders, {
+      orderId,
       bowl,
       size,
       base,
@@ -31,9 +33,14 @@ export const CartProvider = ({ children }) => {
     }]);
   }
 
+  const deleteOrder = (orderId) => {
+    setOrders((prevOrders) => prevOrders.filter((order) => order.orderId !== orderId));
+  };
+
   const value = {
     orders,
     addToOrders,
+    deleteOrder,
   }
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>

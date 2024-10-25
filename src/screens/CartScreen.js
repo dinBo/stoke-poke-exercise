@@ -6,8 +6,9 @@ import { i18n } from '../translations/i18n';
 import { getLocales } from 'expo-localization';
 import { useCart } from '../contexts/CartContext';
 
-const OrderItem = ({ order }) => {
+const OrderItem = ({ order,  }) => {
   const [amount, setAmount] = useState(1)
+  const { deleteOrder } = useCart();
 
   const handleReduceAmount = () => {
     if (amount >= 2) {
@@ -17,8 +18,11 @@ const OrderItem = ({ order }) => {
 
   const handleIncreaseAmount = () => setAmount(amount + 1)
 
+  const handleDeleteOrder = () => deleteOrder(order.orderId);
+
   return (
     <View style={styles.orderContainer}>
+      <Text>id: {order.orderId}</Text>
       <Text style={styles.orderTitle}>{order.bowl.name}</Text>
       <Text>Base: {order.base.name}</Text>
       <Text>Size: {order.size.name}</Text>
@@ -37,7 +41,7 @@ const OrderItem = ({ order }) => {
       ))}
 
       <Text style={styles.description}>{order.bowl.description}</Text>
-      <Button icon="delete" mode="contained" onPress={() => console.log('Pressed')} />
+      <Button icon="delete" mode="contained" onPress={handleDeleteOrder} />
       <Button mode="contained" onPress={handleReduceAmount}>-</Button>
       <Text>{amount}</Text>
       <Button mode="contained" onPress={handleIncreaseAmount}>+</Button>

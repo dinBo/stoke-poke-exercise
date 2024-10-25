@@ -1,4 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
+import * as Crypto from 'expo-crypto';
+
 import { BOWL_SIZE_ID, SECTION_IDS } from '../consts/stepConsts';
 import { DEFAULT_BOWL_DATA } from '../consts/bowlConsts';
 
@@ -9,6 +11,7 @@ export const useOrder = () => {
 }
 
 export const OrderProvider = ({ children }) => {
+  const [orderId, setOrderId] = useState(Crypto.randomUUID());
   const [bowl, setBowl] = useState(DEFAULT_BOWL_DATA.BOWL);
   const [size, setSize] = useState(DEFAULT_BOWL_DATA.SIZE);
   const [base, setBase] = useState(DEFAULT_BOWL_DATA.BASE);
@@ -130,6 +133,7 @@ export const OrderProvider = ({ children }) => {
   }
 
   const resetOrder = () => {
+    setOrderId(Crypto.randomUUID())
     setBowl(DEFAULT_BOWL_DATA.BOWL);
     setSize(DEFAULT_BOWL_DATA.SIZE);
     setBase(DEFAULT_BOWL_DATA.BASE);
@@ -139,6 +143,7 @@ export const OrderProvider = ({ children }) => {
   }
 
   const value = {
+    orderId,
     bowl,
     size,
     base,
