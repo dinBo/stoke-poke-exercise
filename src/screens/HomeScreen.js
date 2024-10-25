@@ -8,6 +8,7 @@ import { STEPS, STEP_TYPES } from '../consts/stepConsts';
 import Section from '../components/Section';
 import { useOrder } from '../contexts/OrderContext';
 import { useCart } from '../contexts/CartContext';
+import { useNavigation } from '@react-navigation/core';
 
 const Step = ({ step, currentStepId, resetSteps }) => {
   const [sections, setSections] = useState([])
@@ -24,6 +25,8 @@ const Step = ({ step, currentStepId, resetSteps }) => {
   } = useOrder();
 
   const { addToOrders } = useCart();
+
+  const navigator = useNavigation();
 
   useEffect(() => {
     const getSection = async (section) => {
@@ -92,7 +95,7 @@ const Step = ({ step, currentStepId, resetSteps }) => {
               icon="camera"
               mode="contained"
               style={[styles.button]}
-              onPress={() => { }}
+              onPress={() => navigator.navigate('Cart')}
             >
               Go to checkout
             </Button>

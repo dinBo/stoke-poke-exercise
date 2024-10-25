@@ -1,10 +1,22 @@
 import { View, StyleSheet, Text, FlatList } from 'react-native';
+import { useEffect, useState } from 'react';
+import { Button } from 'react-native-paper';
+
 import { i18n } from '../translations/i18n';
 import { getLocales } from 'expo-localization';
 import { useCart } from '../contexts/CartContext';
-import { useEffect } from 'react';
 
 const OrderItem = ({ order }) => {
+  const [amount, setAmount] = useState(1)
+
+  const handleReduceAmount = () => {
+    if (amount >= 2) {
+      setAmount(amount - 1)
+    };
+  }
+
+  const handleIncreaseAmount = () => setAmount(amount + 1)
+
   return (
     <View style={styles.orderContainer}>
       <Text style={styles.orderTitle}>{order.bowl.name}</Text>
@@ -25,6 +37,10 @@ const OrderItem = ({ order }) => {
       ))}
 
       <Text style={styles.description}>{order.bowl.description}</Text>
+      <Button icon="delete" mode="contained" onPress={() => console.log('Pressed')} />
+      <Button mode="contained" onPress={handleReduceAmount}>-</Button>
+      <Text>{amount}</Text>
+      <Button mode="contained" onPress={handleIncreaseAmount}>+</Button>
     </View>
   );
 };
