@@ -13,7 +13,7 @@ export default Section = ({ step, section }) => {
 
   return (
     <View key={getId()}>
-      <Text style={styles.sectionTitle}>{getId()}</Text>
+      {/* <Text style={styles.sectionTitle}>{getId()}</Text> */}
       <Text style={styles.sectionTitle}>{section.title}</Text>
       {section.description && <Text style={styles.sectionDescription}>{section.description}</Text>}
       {

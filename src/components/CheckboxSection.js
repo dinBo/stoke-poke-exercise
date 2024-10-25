@@ -48,7 +48,7 @@ const CheckboxOption = ({ step, section, option, setError }) => {
     <Pressable style={styles.option} key={getOptionId()} onPress={handlePressed}>
       <Checkbox status={getStatus()} />
       <Text>{option.name}</Text>
-      <Text>{`key: ${getOptionId()}`}</Text>
+      {/* <Text>{`key: ${getOptionId()}`}</Text> */}
     </Pressable>
   )
 }
