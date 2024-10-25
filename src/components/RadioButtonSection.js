@@ -2,7 +2,7 @@ import { Pressable, StyleSheet, Text, View } from "react-native";
 import { RadioButton } from "react-native-paper";
 import { useEffect, useState } from "react";
 
-import { usePokeBowl } from "../contexts/PokeBoxlContext";
+import { useOrder } from "../contexts/OrderContext";
 import { getSectionId } from "../util/util";
 
 
@@ -14,7 +14,7 @@ const RadioButtonOption = ({ step, section, option, setError }) => {
     sauce,
     getSectionValue,
     updateSectionValue,
-  } = usePokeBowl();
+  } = useOrder();
 
   const isOptionSelected = () => getSectionValue(getSectionId(step, section)).id === option.id;
 

@@ -1,13 +1,15 @@
 import { View, StyleSheet, Text, ScrollView } from 'react-native';
-import { i18n } from '../translations/i18n';
 import { useEffect, useState } from 'react';
+import { Button } from "react-native-paper";
+
+import { i18n } from '../translations/i18n';
 import { fetchSection } from '../services/ApiService';
-import { Button } from 'react-native-paper';
 import { STEPS, STEP_TYPES } from '../consts/stepConsts';
 import Section from '../components/Section';
-import { usePokeBowl } from '../contexts/PokeBoxlContext';
+import { useOrder } from '../contexts/OrderContext';
+import { useCart } from '../contexts/CartContext';
 
-const Step = ({ step, currentStepId }) => {
+const Step = ({ step, currentStepId, resetSteps }) => {
   const [sections, setSections] = useState([])
   const {
     bowl,
@@ -18,7 +20,10 @@ const Step = ({ step, currentStepId }) => {
     extraIngredients,
     priceRegular,
     priceTotal,
-  } = usePokeBowl();
+    resetOrder,
+  } = useOrder();
+
+  const { addToOrders } = useCart();
 
   useEffect(() => {
     const getSection = async (section) => {
@@ -35,6 +40,21 @@ const Step = ({ step, currentStepId }) => {
 
     step.sections?.map(section => getSection(section));
   }, [])
+
+  const handleAddToCart = () => {
+    addToOrders(
+      bowl,
+      size,
+      base,
+      sauce,
+      otherIngredients,
+      extraIngredients,
+      priceRegular,
+      priceTotal,
+    )
+    resetOrder();
+    resetSteps();
+  }
 
   if (currentStepId !== step.id) return
 
@@ -60,6 +80,22 @@ const Step = ({ step, currentStepId }) => {
               extraIngredients.map(ingredient => <Text>{`${ingredient.name} ${ingredient.currency}${ingredient.price}`}</Text>)
             }
             <Text>{`Full price: ${priceTotal.currency}${priceTotal.price}`}</Text>
+            <Button
+              icon="camera"
+              mode="contained"
+              style={[styles.button]}
+              onPress={handleAddToCart}
+            >
+              Add to Cart
+            </Button>
+            <Button
+              icon="camera"
+              mode="contained"
+              style={[styles.button]}
+              onPress={() => { }}
+            >
+              Go to checkout
+            </Button>
           </View>
         )
       }
@@ -76,6 +112,8 @@ export default function HomeScreen() {
 
   const areBothButtonsVisible = () => isBeforeButtonVisible() && isNextButtonVisible()
 
+  const resetSteps = () => setCurrentStep(1)
+
   return (
     <View style={styles.container}>
       <ScrollView>
@@ -84,7 +122,7 @@ export default function HomeScreen() {
         </Text>
         {
           STEPS.map(step => (
-            <Step step={step} key={step.id} currentStepId={currentStepId} />
+            <Step step={step} key={step.id} currentStepId={currentStepId} resetSteps={resetSteps} />
           ))
         }
         <View style={styles.buttonsContainer}>

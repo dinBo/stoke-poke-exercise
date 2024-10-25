@@ -2,13 +2,13 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 import { BOWL_SIZE_ID, SECTION_IDS } from '../consts/stepConsts';
 import { DEFAULT_BOWL_DATA } from '../consts/bowlConsts';
 
-const PokeBowlContext = createContext(null)
+const OrderContext = createContext(null)
 
-export const usePokeBowl = () => {
-  return useContext(PokeBowlContext)
+export const useOrder = () => {
+  return useContext(OrderContext)
 }
 
-export const PokeBowlProvider = ({ children }) => {
+export const OrderProvider = ({ children }) => {
   const [bowl, setBowl] = useState(DEFAULT_BOWL_DATA.BOWL);
   const [size, setSize] = useState(DEFAULT_BOWL_DATA.SIZE);
   const [base, setBase] = useState(DEFAULT_BOWL_DATA.BASE);
@@ -129,6 +129,15 @@ export const PokeBowlProvider = ({ children }) => {
     }
   }
 
+  const resetOrder = () => {
+    setBowl(DEFAULT_BOWL_DATA.BOWL);
+    setSize(DEFAULT_BOWL_DATA.SIZE);
+    setBase(DEFAULT_BOWL_DATA.BASE);
+    setSauce(DEFAULT_BOWL_DATA.SAUCE);
+    setOtherIngredients(DEFAULT_BOWL_DATA.OTHER_INGREDIENTS);
+    setExtraIngredients(DEFAULT_BOWL_DATA.EXTRA_INGREDIENTS);
+  }
+
   const value = {
     bowl,
     size,
@@ -140,7 +149,8 @@ export const PokeBowlProvider = ({ children }) => {
     priceTotal,
     getSectionValue,
     updateSectionValue,
+    resetOrder,
   }
 
-  return <PokeBowlContext.Provider value={value}>{children}</PokeBowlContext.Provider>
+  return <OrderContext.Provider value={value}>{children}</OrderContext.Provider>
 }

@@ -2,7 +2,7 @@ import { Pressable, StyleSheet, Text, View } from "react-native";
 import { Checkbox } from "react-native-paper";
 import { useEffect, useState } from "react";
 
-import { usePokeBowl } from "../contexts/PokeBoxlContext";
+import { useOrder } from "../contexts/OrderContext";
 import { getSectionId } from "../util/util";
 
 
@@ -12,7 +12,7 @@ const CheckboxOption = ({ step, section, option, setError }) => {
     extraIngredients,
     getSectionValue,
     updateSectionValue,
-  } = usePokeBowl();
+  } = useOrder();
 
   const isOptionSelected = () => !!getSectionValue(getSectionId(step, section)).find(opt => opt.id === option.id);
 
