@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { BOWL_SIZE_ID, SECTION_TYPES, SECTION_IDS } from '../consts/stepConsts';
+import { BOWL_SIZE_ID, SECTION_IDS } from '../consts/stepConsts';
 
 const PokeBowlContext = createContext(null)
 
@@ -23,16 +23,28 @@ export const PokeBowlProvider = ({ children }) => {
   //   console.log(`sauce: ${sauce.name}`);
   // }, [bowl, size, base, sauce])
 
-  const verifySizes = () => {
+  const verifySizes = (newSize) => {
     let errorMessage;
-    if (bowl.id === BOWL_SIZE_ID.SMALL && otherIngredients.length >= 5) {
-      errorMessage = `* You’ve chosen the maximum amout of ingrediants for a small size bowl.`
-    }
-    if (bowl.id === BOWL_SIZE_ID.MEDIUM && otherIngredients.length >= 8) {
-      errorMessage = `* You’ve chosen the maximum amout of ingrediants for a medium size bowl.`
-    }
-    if (bowl.id === BOWL_SIZE_ID.LARGE && otherIngredients.length >= 10) {
-      errorMessage = `* You’ve chosen the maximum amout of ingrediants for a large size bowl.`
+    if (newSize) {
+      if (newSize.id === BOWL_SIZE_ID.SMALL && otherIngredients.length > 5) {
+        errorMessage = `* Remove extra ingredients before changing to a small size bowl.`
+      }
+      if (newSize.id === BOWL_SIZE_ID.MEDIUM && otherIngredients.length > 8) {
+        errorMessage = `* Remove extra ingredients before changing to a medium size bowl.`
+      }
+      if (newSize.id === BOWL_SIZE_ID.LARGE && otherIngredients.length > 10) {
+        errorMessage = `* Remove extra ingredients before changing to a large size bowl.`
+      }
+    } else {
+      if (size.id === BOWL_SIZE_ID.SMALL && otherIngredients.length >= 5) {
+        errorMessage = `* You’ve chosen the maximum amout of ingredients for a small size bowl.`
+      }
+      if (size.id === BOWL_SIZE_ID.MEDIUM && otherIngredients.length >= 8) {
+        errorMessage = `* You’ve chosen the maximum amout of ingredients for a medium size bowl.`
+      }
+      if (size.id === BOWL_SIZE_ID.LARGE && otherIngredients.length >= 10) {
+        errorMessage = `* You’ve chosen the maximum amout of ingredients for a large size bowl.`
+      }
     }
     if (errorMessage) {
       throw new Error(errorMessage)
@@ -46,7 +58,6 @@ export const PokeBowlProvider = ({ children }) => {
    * @returns the value of the requested section
    */
   const getSectionValue = (id) => {
-    // if (type === SECTION_TYPES.SINGLE_OPTION) {
     switch (id) {
       case SECTION_IDS.BOWL:
         return bowl;
@@ -56,46 +67,38 @@ export const PokeBowlProvider = ({ children }) => {
         return base;
       case SECTION_IDS.SAUSE:
         return sauce;
-      // TODO I have to remove as well, not only add ingredients
-      // case SECTION_IDS.OTHER:
-      //   verifySizes();
-      //   setOtherIngredients(prevOtherIng => [...prevOtherIng, value]);
-      // case SECTION_IDS.EXTRA:
-      //   setExtraIngredients(value);
+      case SECTION_IDS.OTHER:
+        return otherIngredients;
+      case SECTION_IDS.EXTRA:
+        return extraIngredients;
     }
-    // }
-    // if (type === SECTION_TYPES.MULTIPLE_OPTIONS) {
-
-    // }
   }
 
-  const updateSectionValue = (id, value) => {
-    // if (type === SECTION_TYPES.SINGLE_OPTION) {
-      switch (id) {
-        case SECTION_IDS.BOWL:
-          setBowl(value);
-          return;
-        case SECTION_IDS.SIZE:
+  const updateSectionValue = (id, value, options) => {
+    switch (id) {
+      case SECTION_IDS.BOWL:
+        setBowl(value);
+        return;
+      case SECTION_IDS.SIZE:
+        verifySizes(value);
+        setSize(value);
+        return;
+      case SECTION_IDS.BASE:
+        setBase(value);
+        return;
+      case SECTION_IDS.SAUSE:
+        setSauce(value);
+        return;
+      case SECTION_IDS.OTHER:
+        if (!options?.isRemoving) {
           verifySizes();
-          setSize(value);
-          return;
-        case SECTION_IDS.BASE:
-          setBase(value);
-          return;
-        case SECTION_IDS.SAUSE:
-          setSauce(value);
-          return;
-        // TODO I have to remove as well, not only add ingredients
-        // case SECTION_IDS.OTHER:
-        //   verifySizes();
-        //   setOtherIngredients(prevOtherIng => [...prevOtherIng, value]);
-        // case SECTION_IDS.EXTRA:
-        //   setExtraIngredients(value);
-      }
-    // }
-    // if (type === SECTION_TYPES.MULTIPLE_OPTIONS) {
-
-    // }
+        }
+        setOtherIngredients(value);
+        return;
+      case SECTION_IDS.EXTRA:
+        setExtraIngredients(value);
+        return;
+    }
   }
 
   const value = {

@@ -1,104 +1,10 @@
 import { View, StyleSheet, Text, ScrollView } from 'react-native';
 import { i18n } from '../translations/i18n';
-import { getLocales } from 'expo-localization';
 import { useEffect, useState } from 'react';
-import { fetchBowls, fetchSection, fetchSizes } from '../services/ApiService';
-import { Button, Checkbox, RadioButton } from 'react-native-paper';
-import { SECTION_TYPES, STEPS } from '../consts/stepConsts';
-import { usePokeBowl } from '../contexts/PokeBoxlContext';
-import { getSectionId } from '../util/util';
-
-const RadioButtonOption = ({ step, section, option }) => {
-  const {
-    bowl,
-    size,
-    base,
-    sauce,
-    getSectionValue,
-    updateSectionValue,
-  } = usePokeBowl();
-  const isOptionSelected = () => getSectionValue(getSectionId(step, section)).id === option.id;
-
-  const [isSelected, setIsSelected] = useState(isOptionSelected());
-
-  useEffect(() => {
-    setIsSelected(isOptionSelected())
-  }, [bowl, size, base, sauce])
-
-  const getOptionId = () => `${step.id}_${section.id}_${option.id}`
-
-  const getStatus = () => isSelected ? 'checked' : 'unchecked'
-
-  const handleRBPressed = () => updateSectionValue(getSectionId(step, section), option);
-
-  return (
-    <View style={styles.option} key={getOptionId()}>
-      <RadioButton status={getStatus()} onPress={handleRBPressed} />
-      <Text>{option.name}</Text>
-      {/* <Text>      </Text> */}
-      {/* <Text>{`key: ${getOptionId()}`}</Text> */}
-      {/* <Text>{`status: ${getStatus()}`}</Text> */}
-      {/* <Text>      </Text> */}
-      {/* <Text>{`selected: ${selectedOption.id}`}</Text> */}
-    </View>
-  )
-}
-
-const CheckboxOption = ({ step, section, option }) => {
-  const getId = () => `${step.id}_${section.id}_${option.id}`
-  return (
-    <View style={styles.option} key={getId()}>
-      <Checkbox value={option.id} />
-      <Text>{option.name}</Text>
-      <Text>{`key: ${getId()}`}</Text>
-    </View>
-  )
-}
-
-const RadioButtonSection = ({ step, section }) => {
-  return (
-    <View>
-      {
-        section.options.map(option => (
-          <RadioButtonOption step={step} section={section} option={option} />
-        ))
-      }
-    </View>
-  )
-}
-
-const CheckboxSection = ({ step, section }) => {
-  return (
-    <View>
-      {
-        section.options.map(option => (
-          <CheckboxOption step={step} section={section} option={option} />
-        ))
-      }
-    </View>
-  )
-}
-
-const Section = ({ step, section }) => {
-  const getId = () => `${step.id}_${section.id}`
-  return (
-    <View key={getId()}>
-      <Text style={styles.sectionTitle}>{getId()}</Text>
-      <Text style={styles.sectionTitle}>{section.title}</Text>
-      {section.description && <Text style={styles.sectionDescription}>{section.description}</Text>}
-      {
-        section.type === SECTION_TYPES.SINGLE_OPTION && (
-          <RadioButtonSection step={step} section={section} />
-        )
-      }
-      {
-        section.type === SECTION_TYPES.MULTIPLE_OPTIONS && (
-          <CheckboxSection step={step} section={section} />
-        )
-      }
-    </View>
-  )
-}
+import { fetchSection } from '../services/ApiService';
+import { Button } from 'react-native-paper';
+import { STEPS } from '../consts/stepConsts';
+import Section from '../components/Section';
 
 const Step = ({ step, currentStepId }) => {
   const [sections, setSections] = useState([])
@@ -129,10 +35,6 @@ const Step = ({ step, currentStepId }) => {
 
 export default function HomeScreen() {
   const [currentStepId, setCurrentStep] = useState(1);
-
-  useEffect(() => {
-    // console.log(currentStepId);
-  }, [currentStepId])
 
   const isBeforeButtonVisible = () => currentStepId > 1
 
@@ -188,10 +90,6 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 20,
     marginBottom: 16,
-  },
-  option: {
-    flexDirection: 'row',
-    alignItems: 'center',
   },
   sectionTitle: {
     fontSize: 15,
