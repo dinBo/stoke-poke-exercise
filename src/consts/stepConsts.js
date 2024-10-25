@@ -53,6 +53,7 @@ export const STEPS = [
   },
   {
     id: 3,
+    showPrice: true,
     sections: [
       {
         id: 1,
@@ -64,6 +65,10 @@ export const STEPS = [
       },
     ],
   },
+  // {
+  //   id: 4,
+  //   isPreview: true,
+  // },
 ]
 
 /**

@@ -4,10 +4,16 @@ import { StyleSheet, Text, View } from "react-native";
 import RadioButtonSection from "./RadioButtonSection";
 import CheckboxSection from "./CheckboxSection";
 import { SECTION_TYPES } from "../consts/stepConsts";
+import { usePokeBowl } from "../contexts/PokeBoxlContext";
 
 
 export default Section = ({ step, section }) => {
   const [error, setError] = useState(null);
+
+  const {
+    priceRegular,
+    priceTotal,
+  } = usePokeBowl();
 
   const getId = () => `${step.id}_${section.id}`
 
@@ -27,6 +33,12 @@ export default Section = ({ step, section }) => {
         )
       }
       {error && <Text>{error.message}</Text>}
+      {step.showPrice && (
+        <View>
+          <Text>{`Regular price: ${priceRegular.currency}${priceRegular.price}`}</Text>
+          <Text>{`Price with extra ingredients: ${priceRegular.currency}${priceTotal.price}`}</Text>
+        </View>
+      )}
     </View>
   )
 }

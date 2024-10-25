@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { BOWL_SIZE_ID, SECTION_IDS } from '../consts/stepConsts';
+import { DEFAULT_BOWL_DATA } from '../consts/bowlConsts';
 
 const PokeBowlContext = createContext(null)
 
@@ -8,20 +9,47 @@ export const usePokeBowl = () => {
 }
 
 export const PokeBowlProvider = ({ children }) => {
-  const [bowl, setBowl] = useState({ id: 1, name: "Chicken Poke Bowl" });
-  const [size, setSize] = useState({ id: 1, name: "Small" });
-  const [base, setBase] = useState({ id: 1, name: "White Rice" });
-  const [sauce, setSauce] = useState({ id: 1, name: "Ponzu sauce" });
-  const [otherIngredients, setOtherIngredients] = useState([]);
-  const [extraIngredients, setExtraIngredients] = useState([]);
+  const [bowl, setBowl] = useState(DEFAULT_BOWL_DATA.BOWL);
+  const [size, setSize] = useState(DEFAULT_BOWL_DATA.SIZE);
+  const [base, setBase] = useState(DEFAULT_BOWL_DATA.BASE);
+  const [sauce, setSauce] = useState(DEFAULT_BOWL_DATA.SAUCE);
+  const [otherIngredients, setOtherIngredients] = useState(DEFAULT_BOWL_DATA.OTHER_INGREDIENTS);
+  const [extraIngredients, setExtraIngredients] = useState(DEFAULT_BOWL_DATA.EXTRA_INGREDIENTS);
+  const [priceRegular, setPriceRegular] = useState(DEFAULT_BOWL_DATA.PRICE_REGULAR);
+  const [priceTotal, setPriceTotal] = useState(DEFAULT_BOWL_DATA.PRICE_TOTAL);
+
+  useEffect(() => {
+    setPriceRegular({ currency: size.currency, price: size.price })
+    setPriceTotal(calculateTotalPrice(size, extraIngredients))
+  }, [size, extraIngredients])
+
+  const calculateTotalPrice = (bowlSize, ingredients) => {
+    let totalPrice = bowlSize.price
+    ingredients.map(ing => {
+      totalPrice += ing.price;
+    })
+    return {
+      currency: bowlSize.currency,
+      price: Math.round((totalPrice + Number.EPSILON) * 100) / 100,
+    }
+  }
 
   // useEffect(() => {
+  //   const getIngredientsString = (ingredients) => {
+  //     let ingStr = ''
+  //     ingredients.map(ing => {
+  //       ingStr = `${ingStr}, ${ing.name}`
+  //     })
+  //     return ingStr
+  //   }
   //   console.log('-------------------------');
   //   console.log(`bowl: ${bowl.name}`);
   //   console.log(`size: ${size.name}`);
   //   console.log(`base: ${base.name}`);
   //   console.log(`sauce: ${sauce.name}`);
-  // }, [bowl, size, base, sauce])
+  //   console.log(`other ingredients: ${getIngredientsString(otherIngredients)}`);
+  //   console.log(`extra ingredients: ${getIngredientsString(extraIngredients)}`);
+  // }, [bowl, size, base, sauce, otherIngredients, extraIngredients])
 
   const verifySizes = (newSize) => {
     let errorMessage;
@@ -103,17 +131,13 @@ export const PokeBowlProvider = ({ children }) => {
 
   const value = {
     bowl,
-    setBowl,
     size,
-    setSize,
     base,
-    setBase,
     sauce,
-    setSauce,
     otherIngredients,
-    setOtherIngredients,
     extraIngredients,
-    setExtraIngredients,
+    priceRegular,
+    priceTotal,
     getSectionValue,
     updateSectionValue,
   }
