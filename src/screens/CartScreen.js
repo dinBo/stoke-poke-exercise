@@ -6,9 +6,13 @@ import { i18n } from '../translations/i18n';
 import { getLocales } from 'expo-localization';
 import { useCart } from '../contexts/CartContext';
 
-const OrderItem = ({ order,  }) => {
+const OrderItem = ({ order }) => {
   const [amount, setAmount] = useState(1)
-  const { deleteOrder } = useCart();
+  const { deleteOrder, updateOrderAmount } = useCart();
+
+  useEffect(() => {
+    updateOrderAmount(order.orderId, amount)
+  }, [amount])
 
   const handleReduceAmount = () => {
     if (amount >= 2) {
@@ -22,7 +26,7 @@ const OrderItem = ({ order,  }) => {
 
   return (
     <View style={styles.orderContainer}>
-      <Text>id: {order.orderId}</Text>
+      {/* <Text>id: {order.orderId}</Text> */}
       <Text style={styles.orderTitle}>{order.bowl.name}</Text>
       <Text>Base: {order.base.name}</Text>
       <Text>Size: {order.size.name}</Text>
@@ -52,10 +56,13 @@ const OrderItem = ({ order,  }) => {
 export default function CartScreen() {
   const { orders } = useCart();
 
-  useEffect(() => {
-    console.log('----------------------------');
-    console.log(orders);
-  }, [orders])
+  // useEffect(() => {
+  //   console.log('----------------------------');
+  //   // console.log(orders);
+  //   orders.map(order => {
+  //     console.log(`amount: ${order.amount} - ${order.bowl.name}`);
+  //   })
+  // }, [orders])
 
   return (
     <View style={styles.container}>

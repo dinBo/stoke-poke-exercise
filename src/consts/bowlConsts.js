@@ -7,4 +7,5 @@ export const DEFAULT_BOWL_DATA = {
   EXTRA_INGREDIENTS: [],
   PRICE_REGULAR: { currency: "$", price: 5 },
   PRICE_TOTAL: { currency: "$", price: 5 },
+  AMOUNT: 1,
 }

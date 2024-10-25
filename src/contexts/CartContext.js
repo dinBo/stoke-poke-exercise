@@ -37,10 +37,22 @@ export const CartProvider = ({ children }) => {
     setOrders((prevOrders) => prevOrders.filter((order) => order.orderId !== orderId));
   };
 
+  const updateOrderAmount = (orderId, updatedAmount) => {
+    setOrders((prevOrders) => prevOrders.map((order) => {
+      if (order.orderId === orderId) {
+        const orderCopy = {...order}
+        orderCopy.amount = updatedAmount;
+        return orderCopy;
+      }
+      return order;
+    }));
+  };
+
   const value = {
     orders,
     addToOrders,
     deleteOrder,
+    updateOrderAmount,
   }
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>
