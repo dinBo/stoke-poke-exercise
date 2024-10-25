@@ -5,6 +5,7 @@ import { Button } from 'react-native-paper';
 import { i18n } from '../translations/i18n';
 import { getLocales } from 'expo-localization';
 import { useCart } from '../contexts/CartContext';
+import { roundTo2Digits } from '../util/util';
 
 const OrderItem = ({ order }) => {
   const [amount, setAmount] = useState(1)
@@ -24,6 +25,8 @@ const OrderItem = ({ order }) => {
 
   const handleDeleteOrder = () => deleteOrder(order.orderId);
 
+  const calculateTotalPrice = () => roundTo2Digits(amount * order.priceTotal.price)
+
   return (
     <View style={styles.orderContainer}>
       {/* <Text>id: {order.orderId}</Text> */}
@@ -32,7 +35,7 @@ const OrderItem = ({ order }) => {
       <Text>Size: {order.size.name}</Text>
       <Text>Sauce: {order.sauce.name}</Text>
       <Text>Regular Price: {order.priceRegular.currency}{order.priceRegular.price}</Text>
-      <Text>Total Price: {order.priceTotal.currency}{order.priceTotal.price}</Text>
+      <Text>Total Price: {order.priceTotal.currency}{calculateTotalPrice()}</Text>
 
       <Text style={styles.sectionTitle}>Extra Ingredients:</Text>
       {order.extraIngredients.map((ingredient) => (
@@ -64,6 +67,12 @@ export default function CartScreen() {
   //   })
   // }, [orders])
 
+  const calculateCummulativeOrdersPrice = () => {
+    let cummulativePrice = 0;
+    orders.map(order => cummulativePrice += (order.amount * order.priceTotal.price))
+    return roundTo2Digits(cummulativePrice);
+  }
+
   return (
     <View style={styles.container}>
       {/* <Text style={styles.text}>
@@ -77,6 +86,7 @@ export default function CartScreen() {
         renderItem={({ item }) => <OrderItem order={item} />}
         contentContainerStyle={styles.listContainer}
       />
+      <Text>Cummulative Orders Price: {orders[0]?.priceTotal.currency}{calculateCummulativeOrdersPrice()}</Text>
     </View>
   );
 }

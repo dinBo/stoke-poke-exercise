@@ -3,6 +3,7 @@ import * as Crypto from 'expo-crypto';
 
 import { BOWL_SIZE_ID, SECTION_IDS } from '../consts/stepConsts';
 import { DEFAULT_BOWL_DATA } from '../consts/bowlConsts';
+import { roundTo2Digits } from '../util/util';
 
 const OrderContext = createContext(null)
 
@@ -33,7 +34,7 @@ export const OrderProvider = ({ children }) => {
     })
     return {
       currency: bowlSize.currency,
-      price: Math.round((totalPrice + Number.EPSILON) * 100) / 100,
+      price: roundTo2Digits(totalPrice),
     }
   }
 
