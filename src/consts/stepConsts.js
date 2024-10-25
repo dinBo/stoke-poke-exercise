@@ -3,9 +3,15 @@ export const SECTION_TYPES = {
   MULTIPLE_OPTIONS: 'MULTIPLE_OPTIONS',
 }
 
+export const STEP_TYPES = {
+  CREATE: 'CREATE',
+  PREVIEW: 'PREVIEW',
+}
+
 export const STEPS = [
   {
     id: 1,
+    type: STEP_TYPES.CREATE,
     sections: [
       {
         id: 1,
@@ -18,6 +24,7 @@ export const STEPS = [
   },
   {
     id: 2,
+    type: STEP_TYPES.CREATE,
     sections: [
       {
         id: 1,
@@ -53,6 +60,7 @@ export const STEPS = [
   },
   {
     id: 3,
+    type: STEP_TYPES.CREATE,
     showPrice: true,
     sections: [
       {
@@ -65,10 +73,10 @@ export const STEPS = [
       },
     ],
   },
-  // {
-  //   id: 4,
-  //   isPreview: true,
-  // },
+  {
+    id: 4,
+    type: STEP_TYPES.PREVIEW,
+  },
 ]
 
 /**

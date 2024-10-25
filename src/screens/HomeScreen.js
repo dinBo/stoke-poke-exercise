@@ -3,11 +3,22 @@ import { i18n } from '../translations/i18n';
 import { useEffect, useState } from 'react';
 import { fetchSection } from '../services/ApiService';
 import { Button } from 'react-native-paper';
-import { STEPS } from '../consts/stepConsts';
+import { STEPS, STEP_TYPES } from '../consts/stepConsts';
 import Section from '../components/Section';
+import { usePokeBowl } from '../contexts/PokeBoxlContext';
 
 const Step = ({ step, currentStepId }) => {
   const [sections, setSections] = useState([])
+  const {
+    bowl,
+    size,
+    base,
+    sauce,
+    otherIngredients,
+    extraIngredients,
+    priceRegular,
+    priceTotal,
+  } = usePokeBowl();
 
   useEffect(() => {
     const getSection = async (section) => {
@@ -19,7 +30,10 @@ const Step = ({ step, currentStepId }) => {
         options: sec,
       }])
     }
-    step.sections.map(section => getSection(section));
+
+    if (step.type === STEP_TYPES.PREVIEW) return;
+
+    step.sections?.map(section => getSection(section));
   }, [])
 
   if (currentStepId !== step.id) return
@@ -27,7 +41,27 @@ const Step = ({ step, currentStepId }) => {
   return (
     <View>
       {
-        sections.map((section, index) => <Section step={step} section={section} />)
+        step.type === STEP_TYPES.CREATE && sections.map((section, index) => <Section step={step} section={section} />)
+      }
+      {
+        step.type === STEP_TYPES.PREVIEW && (
+          <View>
+            <Text style={styles.sectionTitle}>{`${bowl.name} ${priceRegular.currency}${priceRegular.price}`}</Text>
+            <Text>{`${size.name} size`}</Text>
+            <Text>{`${base.name} base`}</Text>
+            <Text>{`${sauce.name}`}</Text>
+            {otherIngredients.length > 0 && (
+              <Text>Added ingredients:</Text>
+            )}
+            {
+              otherIngredients.map(ingredient => <Text>{ingredient.name}</Text>)
+            }
+            {
+              extraIngredients.map(ingredient => <Text>{`${ingredient.name} ${ingredient.currency}${ingredient.price}`}</Text>)
+            }
+            <Text>{`Full price: ${priceTotal.currency}${priceTotal.price}`}</Text>
+          </View>
+        )
       }
     </View>
   )
