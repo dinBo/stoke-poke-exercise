@@ -2,37 +2,39 @@ import React from 'react';
 import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
+import { Picker } from '@react-native-picker/picker';
 
 const CheckoutScreen = () => {
-  // Validation schema (optional)
   const validationSchema = Yup.object().shape({
-    name: Yup.string().required('Name is required'),
+    fullName: Yup.string().required('Full name is required'),
     address: Yup.string().required('Address is required'),
+    phoneNumber: Yup.string()
+      .required('Phone number is required')
+      .matches(/^[0-9]+$/, 'Phone number must only contain digits'),
+    paymentMethod: Yup.string().required('Please select a payment method'),
     note: Yup.string(),
-    price: Yup.number().required('Price is required').positive('Price must be positive'),
   });
 
   const handleSubmit = (values) => {
-    // Process form values here
     console.log('Form values:', values);
   };
 
   return (
     <Formik
-      initialValues={{ name: '', address: '', note: '', price: '' }}
+      initialValues={{ fullName: '', address: '', phoneNumber: '', paymentMethod: '', note: '' }}
       validationSchema={validationSchema}
       onSubmit={handleSubmit}
     >
-      {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
+      {({ handleChange, handleBlur, handleSubmit, values, errors, touched, setFieldValue }) => (
         <View style={styles.formContainer}>
-          <Text style={styles.label}>Name</Text>
+          <Text style={styles.label}>Full Name</Text>
           <TextInput
             style={styles.input}
-            onChangeText={handleChange('name')}
-            onBlur={handleBlur('name')}
-            value={values.name}
+            onChangeText={handleChange('fullName')}
+            onBlur={handleBlur('fullName')}
+            value={values.fullName}
           />
-          {touched.name && errors.name && <Text style={styles.error}>{errors.name}</Text>}
+          {touched.fullName && errors.fullName && <Text style={styles.error}>{errors.fullName}</Text>}
 
           <Text style={styles.label}>Address</Text>
           <TextInput
@@ -43,26 +45,41 @@ const CheckoutScreen = () => {
           />
           {touched.address && errors.address && <Text style={styles.error}>{errors.address}</Text>}
 
-          <Text style={styles.label}>Note</Text>
+          <Text style={styles.label}>Phone Number</Text>
           <TextInput
             style={styles.input}
+            onChangeText={handleChange('phoneNumber')}
+            onBlur={handleBlur('phoneNumber')}
+            value={values.phoneNumber}
+            keyboardType="phone-pad"
+          />
+          {touched.phoneNumber && errors.phoneNumber && <Text style={styles.error}>{errors.phoneNumber}</Text>}
+
+          <Text style={styles.label}>Payment Method</Text>
+          <View style={styles.pickerContainer}>
+            <Picker
+              selectedValue={values.paymentMethod}
+              onValueChange={(itemValue) => setFieldValue('paymentMethod', itemValue)}
+            >
+              <Picker.Item label="Select payment method" value="" />
+              <Picker.Item label="Cash" value="cash" />
+              <Picker.Item label="Card" value="card" />
+            </Picker>
+          </View>
+          {touched.paymentMethod && errors.paymentMethod && <Text style={styles.error}>{errors.paymentMethod}</Text>}
+
+          <Text style={styles.label}>Note</Text>
+          <TextInput
+            style={[styles.input, styles.textArea]}
             onChangeText={handleChange('note')}
             onBlur={handleBlur('note')}
             value={values.note}
+            multiline
+            numberOfLines={4}
           />
           {touched.note && errors.note && <Text style={styles.error}>{errors.note}</Text>}
 
-          <Text style={styles.label}>Price</Text>
-          <TextInput
-            style={styles.input}
-            onChangeText={handleChange('price')}
-            onBlur={handleBlur('price')}
-            value={values.price}
-            keyboardType="numeric"
-          />
-          {touched.price && errors.price && <Text style={styles.error}>{errors.price}</Text>}
-
-          <Button title="Submit" onPress={handleSubmit} />
+          <Button title="Place Order" onPress={handleSubmit} />
         </View>
       )}
     </Formik>
@@ -83,6 +100,16 @@ const styles = StyleSheet.create({
     padding: 10,
     marginBottom: 10,
     borderRadius: 4,
+  },
+  pickerContainer: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 4,
+    marginBottom: 10,
+  },
+  textArea: {
+    height: 100,
+    textAlignVertical: 'top',
   },
   error: {
     fontSize: 12,
