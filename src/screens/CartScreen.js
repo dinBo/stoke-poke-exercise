@@ -1,4 +1,4 @@
-import { View, StyleSheet, Text, FlatList } from 'react-native';
+import { View, StyleSheet, Text, FlatList, Alert } from 'react-native';
 import { useEffect, useState } from 'react';
 import { Button } from 'react-native-paper';
 
@@ -24,7 +24,16 @@ const OrderItem = ({ order }) => {
 
   const handleIncreaseAmount = () => setAmount(amount + 1)
 
-  const handleDeleteOrder = () => deleteOrder(order.orderId);
+  const handleDeleteOrder = () => {
+    Alert.alert(
+      "Warning",
+      "Are you sure you want to delete the order from the cart?",
+      [
+        { text: "Cancel", style: "cancel" },
+        { text: "Yes", onPress: () => deleteOrder(order.orderId) }
+      ]
+    );
+  }
 
   const calculateTotalPrice = () => roundTo2Digits(amount * order.priceTotal.price)
 
