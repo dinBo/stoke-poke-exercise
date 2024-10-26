@@ -57,7 +57,7 @@ export default CheckboxSection = ({ step, section, setError }) => {
   return (
     <View>
       {
-        section.options.map(option => (
+        section.options?.map(option => (
           <CheckboxOption step={step} section={section} option={option} setError={setError} />
         ))
       }

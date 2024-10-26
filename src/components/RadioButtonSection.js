@@ -54,7 +54,7 @@ export default RadioButtonSection = ({ step, section, setError }) => {
   return (
     <View>
       {
-        section.options.map(option => (
+        section.options?.map(option => (
           <RadioButtonOption step={step} section={section} option={option} setError={setError} />
         ))
       }

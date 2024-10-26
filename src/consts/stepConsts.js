@@ -8,6 +8,15 @@ export const STEP_TYPES = {
   PREVIEW: 'PREVIEW',
 }
 
+export const SECTIONS_DATA_MAPPING = {
+  BOWL: 'bowls',
+  SIZE: 'sizes',
+  BASE: 'bases',
+  SAUCE: 'sauces',
+  OTHER: 'ingredients',
+  EXTRA: 'extra_ingredients',
+}
+
 export const STEPS = [
   {
     id: 1,
@@ -18,7 +27,7 @@ export const STEPS = [
         title: 'Make your own poke bowl',
         description: `Select the type of bowl your’d like, the size, add the base, sauce and all the added ingredients. We’ll take care of the rest!`,
         type: SECTION_TYPES.SINGLE_OPTION,
-        data: 'bowls',
+        data: SECTIONS_DATA_MAPPING.BOWL,
       },
     ],
   },
@@ -31,21 +40,21 @@ export const STEPS = [
         title: 'Pick a size',
         order: 0,
         type: SECTION_TYPES.SINGLE_OPTION,
-        data: 'sizes',
+        data: SECTIONS_DATA_MAPPING.SIZE,
       },
       {
         id: 2,
         title: 'Pick a base',
         order: 1,
         type: SECTION_TYPES.SINGLE_OPTION,
-        data: 'bases',
+        data: SECTIONS_DATA_MAPPING.BASE,
       },
       {
         id: 3,
         title: 'Pick a sauce',
         order: 2,
         type: SECTION_TYPES.SINGLE_OPTION,
-        data: 'sauces',
+        data: SECTIONS_DATA_MAPPING.SAUCE,
       },
       {
         id: 4,
@@ -53,7 +62,7 @@ export const STEPS = [
         description: `Pick up to 5, 8 of 10 ingredients based on bowl size.`,
         order: 3,
         type: SECTION_TYPES.MULTIPLE_OPTIONS,
-        data: 'ingredients',
+        data: SECTIONS_DATA_MAPPING.OTHER,
         // isLimited: true,
       },
     ],
@@ -69,7 +78,7 @@ export const STEPS = [
         description: 'Weather its more sashimi or an ingrediant you’d like to try out, feel free to add whatever you’d like.',
         order: 0,
         type: SECTION_TYPES.MULTIPLE_OPTIONS,
-        data: 'extra_ingredients',
+        data: SECTIONS_DATA_MAPPING.EXTRA,
       },
     ],
   },
