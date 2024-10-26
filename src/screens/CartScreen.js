@@ -6,6 +6,7 @@ import { i18n } from '../translations/i18n';
 import { getLocales } from 'expo-localization';
 import { useCart } from '../contexts/CartContext';
 import { roundTo2Digits } from '../util/util';
+import { useNavigation } from '@react-navigation/core';
 
 const OrderItem = ({ order }) => {
   const [amount, setAmount] = useState(1)
@@ -59,6 +60,8 @@ const OrderItem = ({ order }) => {
 export default function CartScreen() {
   const { orders } = useCart();
 
+  const navigator = useNavigation();
+
   // useEffect(() => {
   //   console.log('----------------------------');
   //   // console.log(orders);
@@ -87,6 +90,7 @@ export default function CartScreen() {
         contentContainerStyle={styles.listContainer}
       />
       <Text>Cummulative Orders Price: {orders[0]?.priceTotal.currency}{calculateCummulativeOrdersPrice()}</Text>
+      <Button mode="contained" onPress={() => navigator.push('Checkout')}>Proceed to Checkout</Button>
     </View>
   );
 }

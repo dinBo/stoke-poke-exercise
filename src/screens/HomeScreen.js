@@ -97,7 +97,7 @@ const Step = ({ step, currentStepId, resetSteps }) => {
               icon="camera"
               mode="contained"
               style={[styles.button]}
-              onPress={() => navigator.navigate('Cart')}
+              onPress={() => navigator.navigate('CartStack')}
             >
               Go to checkout
             </Button>
