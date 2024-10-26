@@ -1,16 +1,20 @@
 import { View, StyleSheet, Text, FlatList, Alert } from 'react-native';
 import { useEffect, useState } from 'react';
 import { Button } from 'react-native-paper';
+import { useNavigation } from '@react-navigation/core';
 
 import { i18n } from '../translations/i18n';
 import { getLocales } from 'expo-localization';
 import { useCart } from '../contexts/CartContext';
 import { roundTo2Digits } from '../util/util';
-import { useNavigation } from '@react-navigation/core';
+import { useOrder } from '../contexts/OrderContext';
 
 const OrderItem = ({ order }) => {
   const [amount, setAmount] = useState(1)
   const { deleteOrder, updateOrderAmount } = useCart();
+  const { resetOrder } = useOrder();
+
+  const navigator = useNavigation();
 
   useEffect(() => {
     updateOrderAmount(order.orderId, amount)
@@ -33,6 +37,11 @@ const OrderItem = ({ order }) => {
         { text: "Yes", onPress: () => deleteOrder(order.orderId) }
       ]
     );
+  }
+
+  const handleEditOrder = () => {
+    resetOrder(order)
+    navigator.navigate('Home');
   }
 
   const calculateTotalPrice = () => roundTo2Digits(amount * order.priceTotal.price)
@@ -59,6 +68,7 @@ const OrderItem = ({ order }) => {
 
       <Text style={styles.description}>{order.bowl.description}</Text>
       <Button icon="delete" mode="contained" onPress={handleDeleteOrder} />
+      <Button icon="edit" mode="contained" onPress={handleEditOrder} />
       <Button mode="contained" onPress={handleReduceAmount}>-</Button>
       <Text>{amount}</Text>
       <Button mode="contained" onPress={handleIncreaseAmount}>+</Button>
@@ -72,10 +82,22 @@ export default function CartScreen() {
   const navigator = useNavigation();
 
   // useEffect(() => {
-  //   console.log('----------------------------');
-  //   // console.log(orders);
+  //   const getIngredientsString = (ingredients) => {
+  //     let ingStr = ''
+  //     ingredients.map(ing => {
+  //       ingStr = `${ingStr}, ${ing.name}`
+  //     })
+  //     return ingStr
+  //   }
+  //   console.log('*****************************');
   //   orders.map(order => {
-  //     console.log(`amount: ${order.amount} - ${order.bowl.name}`);
+  //     console.log(`orderId: ${order.orderId}`);
+  //     console.log(`bowl: ${order.bowl.name}`);
+  //     console.log(`size: ${order.size.name}`);
+  //     console.log(`base: ${order.base.name}`);
+  //     console.log(`sauce: ${order.sauce.name}`);
+  //     console.log(`other ingredients: ${getIngredientsString(order.otherIngredients)}`);
+  //     console.log(`extra ingredients: ${getIngredientsString(order.extraIngredients)}`);
   //   })
   // }, [orders])
 

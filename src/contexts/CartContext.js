@@ -48,11 +48,21 @@ export const CartProvider = ({ children }) => {
     }));
   };
 
+  const updateOrder = (updatedOrder) => {
+    setOrders((prevOrders) => prevOrders.map((order) => {
+      if (order.orderId === updatedOrder.orderId) {
+        return updatedOrder;
+      }
+      return order;
+    }));
+  }
+
   const value = {
     orders,
     addToOrders,
     deleteOrder,
     updateOrderAmount,
+    updateOrder,
   }
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>

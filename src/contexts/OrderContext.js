@@ -21,6 +21,7 @@ export const OrderProvider = ({ children }) => {
   const [extraIngredients, setExtraIngredients] = useState(DEFAULT_BOWL_DATA.EXTRA_INGREDIENTS);
   const [priceRegular, setPriceRegular] = useState(DEFAULT_BOWL_DATA.PRICE_REGULAR);
   const [priceTotal, setPriceTotal] = useState(DEFAULT_BOWL_DATA.PRICE_TOTAL);
+  const [isEditing, setIsEditing] = useState(DEFAULT_BOWL_DATA.IS_EDITING);
 
   useEffect(() => {
     setPriceRegular({ currency: size.currency, price: size.price })
@@ -47,6 +48,7 @@ export const OrderProvider = ({ children }) => {
   //     return ingStr
   //   }
   //   console.log('-------------------------');
+  //   console.log(`orderId: ${orderId}`);
   //   console.log(`bowl: ${bowl.name}`);
   //   console.log(`size: ${size.name}`);
   //   console.log(`base: ${base.name}`);
@@ -133,14 +135,15 @@ export const OrderProvider = ({ children }) => {
     }
   }
 
-  const resetOrder = () => {
-    setOrderId(Crypto.randomUUID())
-    setBowl(DEFAULT_BOWL_DATA.BOWL);
-    setSize(DEFAULT_BOWL_DATA.SIZE);
-    setBase(DEFAULT_BOWL_DATA.BASE);
-    setSauce(DEFAULT_BOWL_DATA.SAUCE);
-    setOtherIngredients(DEFAULT_BOWL_DATA.OTHER_INGREDIENTS);
-    setExtraIngredients(DEFAULT_BOWL_DATA.EXTRA_INGREDIENTS);
+  const resetOrder = (order = null) => {
+    setOrderId(order ? order.orderId : Crypto.randomUUID())
+    setBowl(order ? order.bowl : DEFAULT_BOWL_DATA.BOWL);
+    setSize(order ? order.size : DEFAULT_BOWL_DATA.SIZE);
+    setBase(order ? order.base : DEFAULT_BOWL_DATA.BASE);
+    setSauce(order ? order.sauce : DEFAULT_BOWL_DATA.SAUCE);
+    setOtherIngredients(order ? order.otherIngredients : DEFAULT_BOWL_DATA.OTHER_INGREDIENTS);
+    setExtraIngredients(order ? order.extraIngredients : DEFAULT_BOWL_DATA.EXTRA_INGREDIENTS);
+    setIsEditing(order ? true : DEFAULT_BOWL_DATA.IS_EDITING)
   }
 
   const value = {
@@ -153,6 +156,7 @@ export const OrderProvider = ({ children }) => {
     extraIngredients,
     priceRegular,
     priceTotal,
+    isEditing,
     getSectionValue,
     updateSectionValue,
     resetOrder,

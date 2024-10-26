@@ -8,4 +8,5 @@ export const DEFAULT_BOWL_DATA = {
   PRICE_REGULAR: { currency: "$", price: 5 },
   PRICE_TOTAL: { currency: "$", price: 5 },
   AMOUNT: 1,
+  IS_EDITING: false,
 }

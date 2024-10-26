@@ -23,9 +23,10 @@ const Step = ({ step, currentStepId, resetSteps }) => {
     priceRegular,
     priceTotal,
     resetOrder,
+    isEditing,
   } = useOrder();
 
-  const { addToOrders } = useCart();
+  const { addToOrders, updateOrder } = useCart();
 
   const navigator = useNavigation();
 
@@ -46,19 +47,36 @@ const Step = ({ step, currentStepId, resetSteps }) => {
   }, [])
 
   const handleAddToCart = () => {
-    addToOrders(
-      orderId,
-      bowl,
-      size,
-      base,
-      sauce,
-      otherIngredients,
-      extraIngredients,
-      priceRegular,
-      priceTotal,
-    )
-    resetOrder();
-    resetSteps();
+    if (isEditing) {
+      updateOrder({
+        orderId,
+        bowl,
+        size,
+        base,
+        sauce,
+        otherIngredients,
+        extraIngredients,
+        priceRegular,
+        priceTotal,
+      })
+      resetOrder();
+      resetSteps();
+      navigator.navigate('Cart')
+    } else {
+      addToOrders(
+        orderId,
+        bowl,
+        size,
+        base,
+        sauce,
+        otherIngredients,
+        extraIngredients,
+        priceRegular,
+        priceTotal,
+      )
+      resetOrder();
+      resetSteps();
+    }
   }
 
   if (currentStepId !== step.id) return
@@ -91,7 +109,7 @@ const Step = ({ step, currentStepId, resetSteps }) => {
               style={[styles.button]}
               onPress={handleAddToCart}
             >
-              Add to Cart
+              {isEditing ? `Update Order` : `Add to Cart`}
             </Button>
             <Button
               icon="camera"
