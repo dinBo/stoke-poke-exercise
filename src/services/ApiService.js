@@ -2,7 +2,7 @@ import { SECTIONS_DATA_MAPPING } from "../consts/stepConsts";
 import { BASES_MOCK, BOWLS_MOCK, EXTRA_INGREDIENTS_MOCK, OTHER_INGREDIENTS_MOCK, SAUCES_MOCK, SIZES_MOCK } from "../mocks/mocks";
 
 export const fetchSection = async (section) => {
-  if (!process.env.EXPO_PUBLIC_USE_MOCK_DATA) {
+  if (process.env.EXPO_PUBLIC_USE_MOCK_DATA !== "true") {
     try {
       console.log('Using live server data');
       const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/api/${section}?currentPage=1`, {

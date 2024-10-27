@@ -15,10 +15,10 @@ export default Step = ({ step, currentStepId, resetSteps }) => {
       if (sections?.length !== 0) return;
 
       const sec = await fetchSection(section.data);
-      setSections(prevSections => [...prevSections, {
-        ...section,
-        options: sec,
-      }])
+      setSections(prevSections =>
+        [...prevSections, { ...section, options: sec }]
+          .sort((a, b) => a.order - b.order)
+      );
     }
 
     if (step.type === STEP_TYPES.PREVIEW) return;
