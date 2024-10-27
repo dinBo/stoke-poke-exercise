@@ -47,7 +47,7 @@ export default Section = ({ step, section }) => {
 
 const styles = StyleSheet.create({
   sectionTitle: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: '700',
     marginBottom: 10,
   },

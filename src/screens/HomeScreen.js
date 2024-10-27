@@ -1,11 +1,25 @@
-import { View, StyleSheet, ScrollView } from 'react-native';
+import { View, StyleSheet, ScrollView, Text } from 'react-native';
 import { useState } from 'react';
-import { Button } from "react-native-paper";
+import { Button, ProgressBar } from "react-native-paper";
 
 import { i18n } from '../translations/i18n';
 import { STEPS } from '../consts/stepConsts';
 import { COLORS } from '../consts/colorsConsts';
 import Step from '../components/Step';
+
+const ProgressIndicator = ({ step }) => {
+  const numberOfSteps = STEPS.length;
+  const getProgress = () => step / numberOfSteps
+  return (
+    <View>
+      <View style={styles.progressIndicatorTextContainer}>
+        <Text style={[styles.progressIndicatorText, {fontWeight: '700'}]}>{`Step ${step}`}</Text>
+        <Text style={[styles.progressIndicatorText]}>{` of ${numberOfSteps}`}</Text>
+      </View>
+      <ProgressBar progress={getProgress()} color={COLORS.RED} />
+    </View>
+  )
+}
 
 export default function HomeScreen() {
   const [currentStepId, setCurrentStep] = useState(1);
@@ -21,6 +35,7 @@ export default function HomeScreen() {
   return (
     <View style={styles.container}>
       <ScrollView style={styles.scrollView}>
+        <ProgressIndicator step={currentStepId} />
         {/* <Text style={styles.text}>
           {i18n.t('welcomeHome')} {i18n.t('name')}
         </Text> */}
@@ -101,5 +116,14 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     padding: 10,
     marginVertical: 20,
+  },
+  progressIndicatorTextContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 20,
+  },
+  progressIndicatorText: {
+    fontSize: 16,
+    marginBottom: 5,
   },
 });

@@ -73,6 +73,7 @@ const styles = StyleSheet.create({
   },
   optionText: {
     fontWeight: '700',
+    fontSize: 16,
   },
   optionTextSelected: {
     color: COLORS.RED,
