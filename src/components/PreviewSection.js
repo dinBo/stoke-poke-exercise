@@ -25,7 +25,7 @@ export default PreviewSection = ({ resetSteps }) => {
 
   const navigator = useNavigation();
 
-  const handleAddToCart = () => {
+  const handleAddToCart = (navigateToScreen) => {
     if (isEditing) {
       updateOrder({
         orderId,
@@ -55,6 +55,7 @@ export default PreviewSection = ({ resetSteps }) => {
       )
       resetOrder();
       resetSteps();
+      navigator.navigate(navigateToScreen)
     }
   }
 
@@ -90,7 +91,9 @@ export default PreviewSection = ({ resetSteps }) => {
         mode="contained"
         style={[styles.button]}
         buttonColor={COLORS.BLACK}
-        onPress={handleAddToCart}
+        onPress={() => {
+          handleAddToCart('Home');
+        }}
       >
         {isEditing ? `Update Order` : `Add to Cart`}
       </Button>
@@ -99,7 +102,9 @@ export default PreviewSection = ({ resetSteps }) => {
         style={[styles.button]}
         buttonColor={COLORS.WHITE}
         textColor={COLORS.BLACK}
-        onPress={() => navigator.navigate('CartStack')}
+        onPress={() => {
+          handleAddToCart('CartStack');
+        }}
       >
         Go to checkout
       </Button>

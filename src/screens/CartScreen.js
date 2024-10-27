@@ -148,8 +148,37 @@ export default function CartScreen() {
         renderItem={({ item }) => <OrderItem order={item} />}
         contentContainerStyle={styles.listContainer}
       />
-      <Text>Cummulative Orders Price: {orders[0]?.priceTotal.currency}{calculateCummulativeOrdersPrice()}</Text>
-      <Button mode="contained" onPress={() => navigator.push('Checkout')}>Proceed to Checkout</Button>
+      <View style={[styles.stepContainer, { marginTop: 0 }]}>
+        <View style={styles.textContainer}>
+          <Text style={styles.content}>Subtotal</Text>
+          <Text style={styles.sectionTitle}>{orders[0]?.priceTotal.currency}{calculateCummulativeOrdersPrice()}</Text>
+        </View>
+        <View style={styles.textContainer}>
+          <Text style={styles.content}>Delivery fee</Text>
+          <Text style={styles.sectionTitle}>{orders[0]?.priceTotal.currency}{'0'}</Text>
+        </View>
+        <View style={styles.textContainer}>
+          <Text style={styles.sectionTitle}>Total</Text>
+          <Text style={[styles.sectionTitle, { color: COLORS.RED }]}>{orders[0]?.priceTotal.currency}{calculateCummulativeOrdersPrice()}</Text>
+        </View>
+        <Button
+          mode="outlined"
+          style={[styles.button]}
+          buttonColor={COLORS.WHITE}
+          textColor={COLORS.BLACK}
+          onPress={() => navigator.navigate('Home')}
+        >
+          Order More
+        </Button>
+        <Button
+          mode="contained"
+          style={[styles.button]}
+          buttonColor={COLORS.RED}
+          onPress={() => navigator.push('Checkout')}
+        >
+          Proceed to Checkout
+        </Button>
+      </View>
     </View>
   );
 }
@@ -216,5 +245,10 @@ const styles = StyleSheet.create({
     width: 45,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  button: {
+    width: '100%',
+    borderRadius: 4,
+    marginTop: 10,
   },
 });
