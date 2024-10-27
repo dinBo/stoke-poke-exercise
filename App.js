@@ -28,7 +28,16 @@ function CartStackNavigator() {
 
 function AppTabs() {
   const { orders } = useCart();
-  const cartItemCount = orders.length;
+
+  const getCartItemsCount = () => {
+    let count = 0;
+    orders.map(order => {
+      count += order.amount;
+    })
+    return count;
+  }
+  
+  const cartItemCount = getCartItemsCount();
 
   return (
     <Tab.Navigator
