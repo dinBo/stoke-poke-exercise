@@ -150,15 +150,15 @@ export default function CartScreen() {
       />
       <View style={[styles.stepContainer, { marginTop: 0 }]}>
         <View style={styles.textContainer}>
-          <Text style={styles.content}>Subtotal</Text>
+          <Text style={styles.content}>{i18n.t('subtotal')}</Text>
           <Text style={styles.sectionTitle}>{orders[0]?.priceTotal.currency}{calculateCummulativeOrdersPrice()}</Text>
         </View>
         <View style={styles.textContainer}>
-          <Text style={styles.content}>Delivery fee</Text>
+          <Text style={styles.content}>{i18n.t('deliveryFee')}</Text>
           <Text style={styles.sectionTitle}>{orders[0]?.priceTotal.currency}{'0'}</Text>
         </View>
         <View style={styles.textContainer}>
-          <Text style={styles.sectionTitle}>Total</Text>
+          <Text style={styles.sectionTitle}>{i18n.t('total')}</Text>
           <Text style={[styles.sectionTitle, { color: COLORS.RED }]}>{orders[0]?.priceTotal.currency}{calculateCummulativeOrdersPrice()}</Text>
         </View>
         <Button
@@ -168,7 +168,7 @@ export default function CartScreen() {
           textColor={COLORS.BLACK}
           onPress={() => navigator.navigate('Home')}
         >
-          Order More
+          {i18n.t('orderMore')}
         </Button>
         <Button
           mode="contained"
@@ -176,7 +176,7 @@ export default function CartScreen() {
           buttonColor={COLORS.RED}
           onPress={() => navigator.push('Checkout')}
         >
-          Proceed to Checkout
+          {i18n.t('proceedToCheckout')}
         </Button>
       </View>
     </View>

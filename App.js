@@ -11,6 +11,7 @@ import CheckoutScreen from './src/screens/CheckoutScreen';
 import { Feather } from '@expo/vector-icons';
 import { COLORS } from './src/consts/colorsConsts';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { i18n } from './src/translations/i18n';
 
 const Tab = createBottomTabNavigator();
 const CartStack = createStackNavigator();
@@ -49,7 +50,7 @@ export default function App() {
                 name="Home"
                 component={HomeScreen}
                 options={{
-                  tabBarLabel: 'Home',
+                  tabBarLabel: i18n.t('home'),
                   tabBarIcon: ({ color, size }) => (
                     <Feather name="home" color={color} size={size} />
                   ),
@@ -59,7 +60,7 @@ export default function App() {
                 name="CartStack"
                 component={CartStackNavigator}
                 options={{
-                  tabBarLabel: 'Cart',
+                  tabBarLabel: i18n.t('cart'),
                   tabBarIcon: ({ color, size }) => (
                     <Feather name="shopping-cart" color={color} size={size} />
                   ),

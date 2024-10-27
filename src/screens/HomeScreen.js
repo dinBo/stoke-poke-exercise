@@ -13,8 +13,8 @@ const ProgressIndicator = ({ step }) => {
   return (
     <View>
       <View style={styles.progressIndicatorTextContainer}>
-        <Text style={[styles.progressIndicatorText, {fontWeight: '700'}]}>{`Step ${step}`}</Text>
-        <Text style={[styles.progressIndicatorText]}>{` of ${numberOfSteps}`}</Text>
+        <Text style={[styles.progressIndicatorText, {fontWeight: '700'}]}>{`${i18n.t('step')} ${step}`}</Text>
+        <Text style={[styles.progressIndicatorText]}>{` ${i18n.t('of')} ${numberOfSteps}`}</Text>
       </View>
       <ProgressBar progress={getProgress()} color={COLORS.RED} />
     </View>
@@ -53,7 +53,7 @@ export default function HomeScreen() {
               style={[styles.button, areBothButtonsVisible() && { width: '45%' }]}
               onPress={() => setCurrentStep(currentStepId - 1)}
             >
-              Back
+              {i18n.t('back')}
             </Button>
           )}
           {isNextButtonVisible() && (
@@ -65,7 +65,7 @@ export default function HomeScreen() {
               contentStyle={styles.buttonContent}
               onPress={() => setCurrentStep(currentStepId + 1)}
             >
-              Next
+            {i18n.t('next')}
             </Button>
           )}
         </View>

@@ -5,6 +5,8 @@ import RadioButtonSection from "./RadioButtonSection";
 import CheckboxSection from "./CheckboxSection";
 import { SECTION_TYPES } from "../consts/stepConsts";
 import { useOrder } from "../contexts/OrderContext";
+import { i18n } from "../translations/i18n";
+import { COLORS } from "../consts/colorsConsts";
 
 
 export default Section = ({ step, section }) => {
@@ -20,8 +22,8 @@ export default Section = ({ step, section }) => {
   return (
     <View key={getId()}>
       {/* <Text style={styles.sectionTitle}>{getId()}</Text> */}
-      <Text style={styles.sectionTitle}>{section.title}</Text>
-      {section.description && <Text style={styles.sectionDescription}>{section.description}</Text>}
+      <Text style={styles.sectionTitle}>{i18n.t(section.title)}</Text>
+      {section.description && <Text style={styles.sectionDescription}>{i18n.t(section.description)}</Text>}
       <View style={styles.sectionOptionsContainer}>
         {
           section.type === SECTION_TYPES.SINGLE_OPTION && (
@@ -37,8 +39,14 @@ export default Section = ({ step, section }) => {
       {error && <Text>{error.message}</Text>}
       {step.showPrice && (
         <View>
-          <Text>{`Regular price: ${priceRegular.currency}${priceRegular.price}`}</Text>
-          <Text>{`Price with extra ingredients: ${priceRegular.currency}${priceTotal.price}`}</Text>
+          <View style={styles.textContainer}>
+            <Text style={styles.content}>{i18n.t('regularPrice')}</Text>
+            <Text style={styles.sectionTitle}>{`${priceRegular.currency}${priceRegular.price}`}</Text>
+          </View>
+          <View style={styles.textContainer}>
+            <Text style={[styles.content, { color: COLORS.RED }]}>{i18n.t('priceWithExtra')}</Text>
+            <Text style={[styles.sectionTitle, { color: COLORS.RED }]}>{`${priceRegular.currency}${priceTotal.price}`}</Text>
+          </View>
         </View>
       )}
     </View>
@@ -55,6 +63,15 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   sectionOptionsContainer: {
+    marginBottom: 10,
+  },
+  textContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  content: {
+    fontSize: 16,
     marginBottom: 10,
   },
 });

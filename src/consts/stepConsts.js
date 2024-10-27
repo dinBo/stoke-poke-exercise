@@ -24,8 +24,8 @@ export const STEPS = [
     sections: [
       {
         id: 1,
-        title: 'Make your own poke bowl',
-        description: `Select the type of bowl your’d like, the size, add the base, sauce and all the added ingredients. We’ll take care of the rest!`,
+        title: 'step11Title',
+        description: `step11Description`,
         type: SECTION_TYPES.SINGLE_OPTION,
         data: SECTIONS_DATA_MAPPING.BOWL,
       },
@@ -37,33 +37,32 @@ export const STEPS = [
     sections: [
       {
         id: 1,
-        title: 'Pick a size',
+        title: 'step21Title',
         order: 0,
         type: SECTION_TYPES.SINGLE_OPTION,
         data: SECTIONS_DATA_MAPPING.SIZE,
       },
       {
         id: 2,
-        title: 'Pick a base',
+        title: 'step22Title',
         order: 1,
         type: SECTION_TYPES.SINGLE_OPTION,
         data: SECTIONS_DATA_MAPPING.BASE,
       },
       {
         id: 3,
-        title: 'Pick a sauce',
+        title: 'step23Title',
         order: 2,
         type: SECTION_TYPES.SINGLE_OPTION,
         data: SECTIONS_DATA_MAPPING.SAUCE,
       },
       {
         id: 4,
-        title: 'Pick other ingredients',
-        description: `Pick up to 5, 8 of 10 ingredients based on bowl size.`,
+        title: 'step24Title',
+        description: 'step24Description',
         order: 3,
         type: SECTION_TYPES.MULTIPLE_OPTIONS,
         data: SECTIONS_DATA_MAPPING.OTHER,
-        // isLimited: true,
       },
     ],
   },
@@ -74,8 +73,8 @@ export const STEPS = [
     sections: [
       {
         id: 1,
-        title: 'Pick an extra engredient',
-        description: 'Weather its more sashimi or an ingrediant you’d like to try out, feel free to add whatever you’d like.',
+        title: 'step31Title',
+        description: 'step31Description',
         order: 0,
         type: SECTION_TYPES.MULTIPLE_OPTIONS,
         data: SECTIONS_DATA_MAPPING.EXTRA,

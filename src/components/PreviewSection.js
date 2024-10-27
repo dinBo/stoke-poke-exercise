@@ -5,6 +5,7 @@ import { useOrder } from '../contexts/OrderContext';
 import { useCart } from '../contexts/CartContext';
 import { useNavigation } from '@react-navigation/core';
 import { COLORS } from '../consts/colorsConsts';
+import { i18n } from '../translations/i18n';
 
 export default PreviewSection = ({ resetSteps }) => {
   const {
@@ -84,7 +85,7 @@ export default PreviewSection = ({ resetSteps }) => {
       }
       <View style={styles.horizontalLine} />
       <View style={styles.textContainer}>
-        <Text style={[styles.content, styles.hightlightedRed]}>{`Full price`}</Text>
+        <Text style={[styles.content, styles.hightlightedRed]}>{i18n.t('fullPrice')}</Text>
         <Text style={[styles.content, styles.hightlightedRed, styles.sectionTitle]}>{`${priceTotal.currency}${priceTotal.price}`}</Text>
       </View>
       <Button
@@ -95,7 +96,7 @@ export default PreviewSection = ({ resetSteps }) => {
           handleAddToCart('Home');
         }}
       >
-        {isEditing ? `Update Order` : `Add to Cart`}
+        {isEditing ? i18n.t('updateOrder') : i18n.t('addToCart')}
       </Button>
       <Button
         mode="outlined"
@@ -106,7 +107,7 @@ export default PreviewSection = ({ resetSteps }) => {
           handleAddToCart('CartStack');
         }}
       >
-        Go to checkout
+        {i18n.t('goToCheckout')}
       </Button>
     </View>
   )
