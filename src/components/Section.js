@@ -22,16 +22,18 @@ export default Section = ({ step, section }) => {
       {/* <Text style={styles.sectionTitle}>{getId()}</Text> */}
       <Text style={styles.sectionTitle}>{section.title}</Text>
       {section.description && <Text style={styles.sectionDescription}>{section.description}</Text>}
-      {
-        section.type === SECTION_TYPES.SINGLE_OPTION && (
-          <RadioButtonSection step={step} section={section} setError={setError} />
-        )
-      }
-      {
-        section.type === SECTION_TYPES.MULTIPLE_OPTIONS && (
-          <CheckboxSection step={step} section={section} setError={setError} />
-        )
-      }
+      <View style={styles.sectionOptionsContainer}>
+        {
+          section.type === SECTION_TYPES.SINGLE_OPTION && (
+            <RadioButtonSection step={step} section={section} setError={setError} />
+          )
+        }
+        {
+          section.type === SECTION_TYPES.MULTIPLE_OPTIONS && (
+            <CheckboxSection step={step} section={section} error={error} setError={setError} />
+          )
+        }
+      </View>
       {error && <Text>{error.message}</Text>}
       {step.showPrice && (
         <View>
@@ -45,7 +47,14 @@ export default Section = ({ step, section }) => {
 
 const styles = StyleSheet.create({
   sectionTitle: {
-    fontSize: 15,
+    fontSize: 18,
     fontWeight: '700',
+    marginBottom: 10,
+  },
+  sectionDescription: {
+    marginBottom: 10,
+  },
+  sectionOptionsContainer: {
+    marginBottom: 10,
   },
 });

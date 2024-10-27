@@ -1,130 +1,11 @@
-import { View, StyleSheet, Text, ScrollView } from 'react-native';
-import { useEffect, useState } from 'react';
+import { View, StyleSheet, ScrollView } from 'react-native';
+import { useState } from 'react';
 import { Button } from "react-native-paper";
 
 import { i18n } from '../translations/i18n';
-import { fetchSection } from '../services/ApiService';
-import { STEPS, STEP_TYPES } from '../consts/stepConsts';
-import Section from '../components/Section';
-import { useOrder } from '../contexts/OrderContext';
-import { useCart } from '../contexts/CartContext';
-import { useNavigation } from '@react-navigation/core';
-
-const Step = ({ step, currentStepId, resetSteps }) => {
-  const [sections, setSections] = useState([])
-  const {
-    orderId,
-    bowl,
-    size,
-    base,
-    sauce,
-    otherIngredients,
-    extraIngredients,
-    priceRegular,
-    priceTotal,
-    resetOrder,
-    isEditing,
-  } = useOrder();
-
-  const { addToOrders, updateOrder } = useCart();
-
-  const navigator = useNavigation();
-
-  useEffect(() => {
-    const getSection = async (section) => {
-      if (sections?.length !== 0) return;
-
-      const sec = await fetchSection(section.data);
-      setSections(prevSections => [...prevSections, {
-        ...section,
-        options: sec,
-      }])
-    }
-
-    if (step.type === STEP_TYPES.PREVIEW) return;
-
-    step.sections?.map(section => getSection(section));
-  }, [])
-
-  const handleAddToCart = () => {
-    if (isEditing) {
-      updateOrder({
-        orderId,
-        bowl,
-        size,
-        base,
-        sauce,
-        otherIngredients,
-        extraIngredients,
-        priceRegular,
-        priceTotal,
-      })
-      resetOrder();
-      resetSteps();
-      navigator.navigate('Cart')
-    } else {
-      addToOrders(
-        orderId,
-        bowl,
-        size,
-        base,
-        sauce,
-        otherIngredients,
-        extraIngredients,
-        priceRegular,
-        priceTotal,
-      )
-      resetOrder();
-      resetSteps();
-    }
-  }
-
-  if (currentStepId !== step.id) return
-
-  return (
-    <View>
-      {
-        step.type === STEP_TYPES.CREATE && sections.map((section, index) => <Section step={step} section={section} />)
-      }
-      {
-        step.type === STEP_TYPES.PREVIEW && (
-          <View>
-            <Text style={styles.sectionTitle}>{`${bowl.name} ${priceRegular.currency}${priceRegular.price}`}</Text>
-            <Text>{`${size.name} size`}</Text>
-            <Text>{`${base.name} base`}</Text>
-            <Text>{`${sauce.name}`}</Text>
-            {otherIngredients.length > 0 && (
-              <Text>Added ingredients:</Text>
-            )}
-            {
-              otherIngredients.map(ingredient => <Text>{ingredient.name}</Text>)
-            }
-            {
-              extraIngredients.map(ingredient => <Text>{`${ingredient.name} ${ingredient.currency}${ingredient.price}`}</Text>)
-            }
-            <Text>{`Full price: ${priceTotal.currency}${priceTotal.price}`}</Text>
-            <Button
-              icon="camera"
-              mode="contained"
-              style={[styles.button]}
-              onPress={handleAddToCart}
-            >
-              {isEditing ? `Update Order` : `Add to Cart`}
-            </Button>
-            <Button
-              icon="camera"
-              mode="contained"
-              style={[styles.button]}
-              onPress={() => navigator.navigate('CartStack')}
-            >
-              Go to checkout
-            </Button>
-          </View>
-        )
-      }
-    </View>
-  )
-}
+import { STEPS } from '../consts/stepConsts';
+import { COLORS } from '../consts/colorsConsts';
+import Step from '../components/Step';
 
 export default function HomeScreen() {
   const [currentStepId, setCurrentStep] = useState(1);
@@ -139,10 +20,10 @@ export default function HomeScreen() {
 
   return (
     <View style={styles.container}>
-      <ScrollView>
-        <Text style={styles.text}>
+      <ScrollView style={styles.scrollView}>
+        {/* <Text style={styles.text}>
           {i18n.t('welcomeHome')} {i18n.t('name')}
-        </Text>
+        </Text> */}
         {
           STEPS.map(step => (
             <Step step={step} key={step.id} currentStepId={currentStepId} resetSteps={resetSteps} />
@@ -151,9 +32,10 @@ export default function HomeScreen() {
         <View style={styles.buttonsContainer}>
           {isBeforeButtonVisible() && (
             <Button
-              icon="camera"
-              mode="contained"
-              style={[styles.button, areBothButtonsVisible() && { width: '50%' }]}
+              mode="outlined"
+              buttonColor={COLORS.WHITE}
+              textColor={COLORS.BLACK}
+              style={[styles.button, areBothButtonsVisible() && { width: '45%' }]}
               onPress={() => setCurrentStep(currentStepId - 1)}
             >
               Back
@@ -161,9 +43,11 @@ export default function HomeScreen() {
           )}
           {isNextButtonVisible() && (
             <Button
-              icon="camera"
+              icon="chevron-right"
               mode="contained"
-              style={[styles.button, areBothButtonsVisible() && { width: '50%' }]}
+              buttonColor={COLORS.BLACK}
+              style={[styles.button, areBothButtonsVisible() && { width: '45%' }]}
+              contentStyle={styles.buttonContent}
               onPress={() => setCurrentStep(currentStepId + 1)}
             >
               Next
@@ -177,10 +61,15 @@ export default function HomeScreen() {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    // alignItems: 'center',
+    // justifyContent: 'center',
     flex: 1,
+  },
+  scrollView: {
+    // alignItems: 'center',
+    // justifyContent: 'center',
+    flex: 1,
+    paddingHorizontal: 20,
   },
   text: {
     fontSize: 20,
@@ -193,8 +82,24 @@ const styles = StyleSheet.create({
   buttonsContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
+    gap: 20,
+    marginTop: 10,
+    marginBottom: 30,
   },
   button: {
     width: '100%',
+    // marginHorizontal: 10,
+    borderRadius: 4,
+  },
+  buttonContent: {
+    flexDirection: 'row-reverse'
+  },
+  stepContainer: {
+    borderWidth: 1,
+    borderColor: COLORS.GRAY,
+    borderRadius: 4,
+    backgroundColor: '#fff',
+    padding: 10,
+    marginVertical: 20,
   },
 });

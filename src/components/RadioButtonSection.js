@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 
 import { useOrder } from "../contexts/OrderContext";
 import { getSectionId } from "../util/util";
+import { COLORS } from "../consts/colorsConsts";
 
 
 const RadioButtonOption = ({ step, section, option, setError }) => {
@@ -39,8 +40,8 @@ const RadioButtonOption = ({ step, section, option, setError }) => {
 
   return (
     <Pressable style={styles.option} key={getOptionId()} onPress={handlePressed}>
-      <RadioButton status={getStatus()} onPress={handlePressed} />
-      <Text>{`${option.name}${option.price ? ` - ${option.currency}${option.price}` : ''}`}</Text>
+      <RadioButton status={getStatus()} onPress={handlePressed} color={COLORS.RED} />
+      <Text style={[styles.optionText, isSelected && styles.optionTextSelected]}>{`${option.name}${option.price ? ` - ${option.currency}${option.price}` : ''}`}</Text>
       {/* <Text>      </Text> */}
       {/* <Text>{`key: ${getOptionId()}`}</Text> */}
       {/* <Text>{`status: ${getStatus()}`}</Text> */}
@@ -66,5 +67,11 @@ const styles = StyleSheet.create({
   option: {
     flexDirection: 'row',
     alignItems: 'center',
+  },
+  optionText: {
+    fontWeight: '700',
+  },
+  optionTextSelected: {
+    color: COLORS.RED,
   },
 });

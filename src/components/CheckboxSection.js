@@ -4,9 +4,10 @@ import { useEffect, useState } from "react";
 
 import { useOrder } from "../contexts/OrderContext";
 import { getSectionId } from "../util/util";
+import { COLORS } from "../consts/colorsConsts";
 
 
-const CheckboxOption = ({ step, section, option, setError }) => {
+const CheckboxOption = ({ step, section, option, error, setError }) => {
   const {
     otherIngredients,
     extraIngredients,
@@ -46,19 +47,19 @@ const CheckboxOption = ({ step, section, option, setError }) => {
 
   return (
     <Pressable style={styles.option} key={getOptionId()} onPress={handlePressed}>
-      <Checkbox status={getStatus()} onPress={handlePressed} />
-      <Text>{`${option.name}${option.price ? ` - ${option.currency}${option.price}` : ''}`}</Text>
+      <Checkbox status={getStatus()} onPress={handlePressed} color={COLORS.RED} uncheckedColor={error ? COLORS.GRAY : COLORS.RED} />
+      <Text style={[styles.optionText, isSelected && styles.optionTextSelected]}>{`${option.name}${option.price ? ` - ${option.currency}${option.price}` : ''}`}</Text>
       {/* <Text>{`key: ${getOptionId()}`}</Text> */}
     </Pressable>
   )
 }
 
-export default CheckboxSection = ({ step, section, setError }) => {
+export default CheckboxSection = ({ step, section, error, setError }) => {
   return (
     <View>
       {
         section.options?.map(option => (
-          <CheckboxOption step={step} section={section} option={option} setError={setError} />
+          <CheckboxOption step={step} section={section} option={option} error={error} setError={setError} />
         ))
       }
     </View>
@@ -69,5 +70,11 @@ const styles = StyleSheet.create({
   option: {
     flexDirection: 'row',
     alignItems: 'center',
+  },
+  optionText: {
+    fontWeight: '700',
+  },
+  optionTextSelected: {
+    color: COLORS.RED,
   },
 });
