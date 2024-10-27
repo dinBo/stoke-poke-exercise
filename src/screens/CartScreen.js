@@ -144,7 +144,7 @@ export default function CartScreen() {
       <Text>Device locale: {getLocales()[0].languageCode}</Text> */}
       <FlatList
         data={orders}
-        keyExtractor={(item) => item.bowl.id.toString()}
+        keyExtractor={(item) => item.orderId}
         renderItem={({ item }) => <OrderItem order={item} />}
         contentContainerStyle={styles.listContainer}
       />

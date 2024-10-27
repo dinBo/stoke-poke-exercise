@@ -51,7 +51,10 @@ export const CartProvider = ({ children }) => {
   const updateOrder = (updatedOrder) => {
     setOrders((prevOrders) => prevOrders.map((order) => {
       if (order.orderId === updatedOrder.orderId) {
-        return updatedOrder;
+        return {
+          ...updatedOrder,
+          amount: order.amount,
+        };
       }
       return order;
     }));
