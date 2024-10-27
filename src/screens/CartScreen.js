@@ -1,4 +1,4 @@
-import { View, StyleSheet, Text, FlatList, Alert } from 'react-native';
+import { View, StyleSheet, Text, FlatList, Alert, Pressable } from 'react-native';
 import { useEffect, useState } from 'react';
 import { Button } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/core';
@@ -8,6 +8,8 @@ import { getLocales } from 'expo-localization';
 import { useCart } from '../contexts/CartContext';
 import { roundTo2Digits } from '../util/util';
 import { useOrder } from '../contexts/OrderContext';
+import { COLORS } from '../consts/colorsConsts';
+import { Feather } from '@expo/vector-icons';
 
 const OrderItem = ({ order }) => {
   const [amount, setAmount] = useState(1)
@@ -46,32 +48,57 @@ const OrderItem = ({ order }) => {
 
   const calculateTotalPrice = () => roundTo2Digits(amount * order.priceTotal.price)
 
+  const getIngredientsString = (ingredients) => {
+    let ingStr = ''
+    if (ingredients.length === 0) {
+      return '-'
+    }
+    ingredients.map(ing => {
+      if (!ingStr) {
+        ingStr = ing.name;
+      }
+      ingStr = `${ingStr}, ${ing.name}`
+    })
+    return ingStr
+  }
+
   return (
-    <View style={styles.orderContainer}>
-      {/* <Text>id: {order.orderId}</Text> */}
-      <Text style={styles.orderTitle}>{order.bowl.name}</Text>
-      <Text>Base: {order.base.name}</Text>
-      <Text>Size: {order.size.name}</Text>
-      <Text>Sauce: {order.sauce.name}</Text>
-      <Text>Regular Price: {order.priceRegular.currency}{order.priceRegular.price}</Text>
-      <Text>Total Price: {order.priceTotal.currency}{calculateTotalPrice()}</Text>
-
-      <Text style={styles.sectionTitle}>Extra Ingredients:</Text>
-      {order.extraIngredients.map((ingredient) => (
-        <Text key={ingredient.id}>- {ingredient.name}</Text>
+    <View style={styles.stepContainer}>
+      <View style={styles.textContainer}>
+        <Text style={styles.sectionTitle}>{order.bowl.name}</Text>
+        <Text style={styles.sectionTitle}>{`${order.priceTotal.currency}${calculateTotalPrice()}`}</Text>
+      </View>
+      <Text style={styles.content}>{order.size.name}</Text>
+      <Text style={styles.content}>{order.base.name}</Text>
+      <Text style={styles.content}>{order.sauce.name}</Text>
+      <Text style={styles.content}>{getIngredientsString(order.otherIngredients)}</Text>
+      {order.extraIngredients.length !== 0 && order.extraIngredients.map((ingredient) => (
+        <Text style={styles.content} key={ingredient.id}>{ingredient.name}</Text>
       ))}
-
-      <Text style={styles.sectionTitle}>Other Ingredients:</Text>
-      {order.otherIngredients.map((ingredient) => (
-        <Text key={ingredient.id}>- {ingredient.name}</Text>
-      ))}
-
-      <Text style={styles.description}>{order.bowl.description}</Text>
-      <Button icon="delete" mode="contained" onPress={handleDeleteOrder} />
-      <Button icon="edit" mode="contained" onPress={handleEditOrder} />
-      <Button mode="contained" onPress={handleReduceAmount}>-</Button>
-      <Text>{amount}</Text>
-      <Button mode="contained" onPress={handleIncreaseAmount}>+</Button>
+      {order.extraIngredients.length === 0 && (
+        <Text style={styles.content}>-</Text>
+      )}
+      <View style={styles.buttonsContainer}>
+        <View style={styles.buttonsContainerSection}>
+          <Pressable style={styles.actionButton} onPress={handleDeleteOrder}>
+            <Feather name="trash-2" size={24} color="black" />
+          </Pressable>
+          <Pressable style={styles.actionButton} onPress={handleEditOrder}>
+            <Feather name="edit" size={24} color="black" />
+          </Pressable>
+        </View>
+        <View style={styles.buttonsContainerSection}>
+          <Pressable style={[styles.amountButton, { borderTopRightRadius: 0, borderBottomRightRadius: 0 }]} onPress={handleReduceAmount}>
+            <Feather name="chevron-down" size={18} color="black" />
+          </Pressable>
+          <View style={styles.amountIndicator}>
+            <Text>{amount}</Text>
+          </View>
+          <Pressable style={[styles.amountButton, { borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }]} onPress={handleIncreaseAmount}>
+            <Feather name="chevron-up" size={18} color="black" />
+          </Pressable>
+        </View>
+      </View>
     </View>
   );
 };
@@ -90,15 +117,16 @@ export default function CartScreen() {
   //     return ingStr
   //   }
   //   console.log('*****************************');
-  //   orders.map(order => {
-  //     console.log(`orderId: ${order.orderId}`);
-  //     console.log(`bowl: ${order.bowl.name}`);
-  //     console.log(`size: ${order.size.name}`);
-  //     console.log(`base: ${order.base.name}`);
-  //     console.log(`sauce: ${order.sauce.name}`);
-  //     console.log(`other ingredients: ${getIngredientsString(order.otherIngredients)}`);
-  //     console.log(`extra ingredients: ${getIngredientsString(order.extraIngredients)}`);
-  //   })
+  //   console.log(JSON.stringify(orders));
+  //   // orders.map(order => {
+  //   //   console.log(`orderId: ${order.orderId}`);
+  //   //   console.log(`bowl: ${order.bowl.name}`);
+  //   //   console.log(`size: ${order.size.name}`);
+  //   //   console.log(`base: ${order.base.name}`);
+  //   //   console.log(`sauce: ${order.sauce.name}`);
+  //   //   console.log(`other ingredients: ${getIngredientsString(order.otherIngredients)}`);
+  //   //   console.log(`extra ingredients: ${getIngredientsString(order.extraIngredients)}`);
+  //   // })
   // }, [orders])
 
   const calculateCummulativeOrdersPrice = () => {
@@ -128,41 +156,65 @@ export default function CartScreen() {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
     flex: 1,
   },
-  text: {
-    fontSize: 20,
-    marginBottom: 16,
+  stepContainer: {
+    borderWidth: 1,
+    borderColor: COLORS.GRAY,
+    borderRadius: 4,
+    backgroundColor: '#fff',
+    padding: 10,
+    marginVertical: 10,
+    marginHorizontal: 20,
   },
-  listContainer: {
-    padding: 20,
-  },
-  orderContainer: {
-    padding: 15,
-    marginBottom: 20,
-    backgroundColor: '#f8f9fa',
-    borderRadius: 8,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.3,
-    shadowRadius: 2,
-  },
-  orderTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 10,
+  textContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   sectionTitle: {
+    fontSize: 20,
+    fontWeight: '700',
+    marginBottom: 10,
+  },
+  content: {
     fontSize: 16,
-    fontWeight: 'bold',
+  },
+  buttonsContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+  },
+  buttonsContainerSection: {
+    flexDirection: 'row',
+    alignItems: 'center',
     marginTop: 10,
   },
-  description: {
-    fontStyle: 'italic',
-    marginTop: 10,
-    color: '#6c757d',
+  actionButton: {
+    borderWidth: 1,
+    borderColor: COLORS.BLACK,
+    borderRadius: 4,
+    marginRight: 5,
+    height: 45,
+    width: 45,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  amountButton: {
+    backgroundColor: COLORS.GRAY,
+    borderColor: COLORS.BLACK,
+    borderRadius: 4,
+    height: 45,
+    width: 45,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  amountIndicator: {
+    borderWidth: 1,
+    borderColor: COLORS.GRAY,
+    height: 45,
+    width: 45,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
