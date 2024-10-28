@@ -1,15 +1,16 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
-import { useLanguage, i18n } from '../contexts/LanguageContext';
+import { useLanguage } from '../contexts/LanguageContext';
 import { COLORS } from '../consts/colorsConsts';
+import { SimpleLineIcons } from '@expo/vector-icons';
 
 const Header = () => {
   const { locale, changeLanguage } = useLanguage();
 
   return (
     <View style={styles.headerContainer}>
-      <Text style={styles.headerTitle}>{i18n.t('home')}</Text>
+      <SimpleLineIcons name="menu" size={32} color={COLORS.RED} />
       <View style={styles.pickerContainer}>
         <Picker
           selectedValue={locale}
@@ -27,11 +28,11 @@ const Header = () => {
 const styles = StyleSheet.create({
   headerContainer: {
     height: 60,
-    backgroundColor: COLORS.GRAY,
+    backgroundColor: COLORS.WHITE,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: 10,
+    paddingHorizontal: 20,
   },
   headerTitle: {
     color: COLORS.BLACK,
@@ -46,6 +47,8 @@ const styles = StyleSheet.create({
   picker: {
     width: '100%',
     height: 40,
+    backgroundColor: COLORS.GRAY,
+    borderRadius: 4,
   },
 });
 
