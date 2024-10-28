@@ -60,12 +60,15 @@ export const CartProvider = ({ children }) => {
     }));
   }
 
+  const resetOrders = () => setOrders([])
+
   const value = {
     orders,
     addToOrders,
     deleteOrder,
     updateOrderAmount,
     updateOrder,
+    resetOrders,
   }
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>

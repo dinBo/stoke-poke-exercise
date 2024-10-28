@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, StyleSheet } from 'react-native';
+import { View, Text, TextInput, StyleSheet, Alert } from 'react-native';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { Picker } from '@react-native-picker/picker';
@@ -11,6 +11,7 @@ import { roundTo2Digits } from '../util/util';
 import { Button } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/core';
 import { i18n, useLanguage } from '../contexts/LanguageContext';
+import { submitOrders } from '../services/ApiService';
 
 const OrderSummary = () => {
   const { orders } = useCart();
@@ -50,7 +51,7 @@ const OrderSummary = () => {
       <View style={styles.horizontalLine} />
       <View style={[styles.textContainer, { marginBottom: 20 }]}>
         <Text style={[styles.content, { color: COLORS.RED }]}>{i18n.t('total')}</Text>
-        <Text style={[styles.content, styles.sectionTitle, { color: COLORS.RED }]}>{`${orders[0]?.priceTotal.currency}${calculateCummulativeOrdersPrice()}`}</Text>
+        <Text style={[styles.content, styles.sectionTitle, { color: COLORS.RED }]}>{`${orders[0] ? orders[0]?.priceTotal.currency : '$'}${calculateCummulativeOrdersPrice()}`}</Text>
       </View>
     </View>
   )
@@ -58,6 +59,7 @@ const OrderSummary = () => {
 
 const CheckoutScreen = () => {
   const [focusedField, setFocusedField] = useState(null);
+  const { orders, resetOrders } = useCart();
   const { locale, changeLanguage } = useLanguage();
 
   const navigator = useNavigation();
@@ -72,8 +74,24 @@ const CheckoutScreen = () => {
     note: Yup.string(),
   });
 
-  const handleSubmit = (values) => {
+  const getOrdersForSubmit = () => {
+    return orders.map(order => ({
+      bowlId: order.bowl.id,
+      sizeId: order.size.id,
+      baseId: order.base.id,
+      sauceId: order.sauce.id,
+      ingredients: order.otherIngredients.map(ingredient => ingredient.name),
+      extraIngredients: order.extraIngredients.map(ingredient => ingredient.name),
+    }))
+  }
+
+  const handleSubmit =  async (values) => {
     console.log('Form values:', values);
+    const res = await submitOrders(getOrdersForSubmit());
+    if (res.message === 'Success!') {
+      Alert.alert(`Your order was submitted successfully!`);
+      resetOrders()
+    }
   };
 
   const getInputStyle = (field, touched, error) => {
