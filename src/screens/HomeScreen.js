@@ -2,10 +2,10 @@ import { View, StyleSheet, ScrollView, Text } from 'react-native';
 import { useState } from 'react';
 import { Button, ProgressBar } from "react-native-paper";
 
-import { i18n } from '../translations/i18n';
 import { STEPS } from '../consts/stepConsts';
 import { COLORS } from '../consts/colorsConsts';
 import Step from '../components/Step';
+import { i18n, useLanguage } from '../contexts/LanguageContext';
 
 const ProgressIndicator = ({ step }) => {
   const numberOfSteps = STEPS.length;
@@ -23,6 +23,8 @@ const ProgressIndicator = ({ step }) => {
 
 export default function HomeScreen() {
   const [currentStepId, setCurrentStep] = useState(1);
+
+  const { locale, changeLanguage } = useLanguage();
 
   const isBeforeButtonVisible = () => currentStepId > 1
 

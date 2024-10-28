@@ -3,13 +3,14 @@ import { View, Text, TextInput, StyleSheet } from 'react-native';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { Picker } from '@react-native-picker/picker';
-import { i18n } from '../translations/i18n';
+
 import { COLORS } from '../consts/colorsConsts';
 import { ScrollView } from 'react-native-gesture-handler';
 import { useCart } from '../contexts/CartContext';
 import { roundTo2Digits } from '../util/util';
 import { Button } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/core';
+import { i18n, useLanguage } from '../contexts/LanguageContext';
 
 const OrderSummary = () => {
   const { orders } = useCart();
@@ -57,6 +58,7 @@ const OrderSummary = () => {
 
 const CheckoutScreen = () => {
   const [focusedField, setFocusedField] = useState(null);
+  const { locale, changeLanguage } = useLanguage();
 
   const navigator = useNavigation();
 

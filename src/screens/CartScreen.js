@@ -3,13 +3,12 @@ import { useEffect, useState } from 'react';
 import { Button } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/core';
 
-import { i18n } from '../translations/i18n';
-import { getLocales } from 'expo-localization';
 import { useCart } from '../contexts/CartContext';
 import { roundTo2Digits } from '../util/util';
 import { useOrder } from '../contexts/OrderContext';
 import { COLORS } from '../consts/colorsConsts';
 import { Feather } from '@expo/vector-icons';
+import { i18n, useLanguage } from '../contexts/LanguageContext';
 
 const OrderItem = ({ order }) => {
   const [amount, setAmount] = useState(1)
@@ -105,6 +104,7 @@ const OrderItem = ({ order }) => {
 
 export default function CartScreen() {
   const { orders } = useCart();
+  const { locale, changeLanguage } = useLanguage();
 
   const navigator = useNavigation();
 

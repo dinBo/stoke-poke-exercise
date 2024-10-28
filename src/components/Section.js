@@ -5,8 +5,8 @@ import RadioButtonSection from "./RadioButtonSection";
 import CheckboxSection from "./CheckboxSection";
 import { SECTION_TYPES } from "../consts/stepConsts";
 import { useOrder } from "../contexts/OrderContext";
-import { i18n } from "../translations/i18n";
 import { COLORS } from "../consts/colorsConsts";
+import { i18n, useLanguage } from "../contexts/LanguageContext";
 
 
 export default Section = ({ step, section }) => {
@@ -16,6 +16,8 @@ export default Section = ({ step, section }) => {
     priceRegular,
     priceTotal,
   } = useOrder();
+
+  const { locale, changeLanguage } = useLanguage();
 
   const getId = () => `${step.id}_${section.id}`
 

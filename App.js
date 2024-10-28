@@ -9,10 +9,11 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import HomeScreen from './src/screens/HomeScreen';
 import CartScreen from './src/screens/CartScreen';
 import CheckoutScreen from './src/screens/CheckoutScreen';
+import Header from './src/components/Header';
 import { OrderProvider } from './src/contexts/OrderContext';
 import { CartProvider, useCart } from './src/contexts/CartContext';
 import { COLORS } from './src/consts/colorsConsts';
-import { i18n } from './src/translations/i18n';
+import { LanguageProvider, i18n, useLanguage } from './src/contexts/LanguageContext';
 
 const Tab = createBottomTabNavigator();
 const CartStack = createStackNavigator();
@@ -20,14 +21,15 @@ const CartStack = createStackNavigator();
 function CartStackNavigator() {
   return (
     <CartStack.Navigator>
-      <CartStack.Screen name="Cart" component={CartScreen} />
-      <CartStack.Screen name="Checkout" component={CheckoutScreen} />
+      <CartStack.Screen name="Cart" component={CartScreen} options={{ headerShown: false }} />
+      <CartStack.Screen name="Checkout" component={CheckoutScreen} options={{ headerShown: false }} />
     </CartStack.Navigator>
   );
 }
 
 function AppTabs() {
   const { orders } = useCart();
+  const { locale, changeLanguage } = useLanguage();
 
   const getCartItemsCount = () => {
     let count = 0;
@@ -36,7 +38,7 @@ function AppTabs() {
     })
     return count;
   }
-  
+
   const cartItemCount = getCartItemsCount();
 
   return (
@@ -91,9 +93,14 @@ export default function App() {
     <SafeAreaView style={styles.saw}>
       <CartProvider>
         <OrderProvider>
-          <NavigationContainer>
-            <AppTabs />
-          </NavigationContainer>
+          <LanguageProvider>
+            <NavigationContainer>
+              <View style={{ flex: 1 }}>
+                <Header />
+                <AppTabs />
+              </View>
+            </NavigationContainer>
+          </LanguageProvider>
         </OrderProvider>
       </CartProvider>
     </SafeAreaView>

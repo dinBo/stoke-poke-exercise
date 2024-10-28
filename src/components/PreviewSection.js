@@ -5,7 +5,7 @@ import { useOrder } from '../contexts/OrderContext';
 import { useCart } from '../contexts/CartContext';
 import { useNavigation } from '@react-navigation/core';
 import { COLORS } from '../consts/colorsConsts';
-import { i18n } from '../translations/i18n';
+import { i18n, useLanguage } from '../contexts/LanguageContext';
 
 export default PreviewSection = ({ resetSteps }) => {
   const {
@@ -23,6 +23,7 @@ export default PreviewSection = ({ resetSteps }) => {
   } = useOrder();
 
   const { addToOrders, updateOrder } = useCart();
+  const { locale, changeLanguage } = useLanguage();
 
   const navigator = useNavigation();
 
